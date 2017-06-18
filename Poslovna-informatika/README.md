@@ -1,1 +1,0 @@
-# Poslovna-informatika
