@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions 
-    targetNamespace="http://www.ftn.uns.ac.rs/Banka"
+	name ="BankaService"
+    targetNamespace="http://www.ftn.uns.ac.rs/banka"
     xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
     xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-    xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:fak="http://www.ftn.uns.ac.rs/faktura"
-    xmlns:ws="http://www.ftn.uns.ac.rs/Banka"
+    xmlns:ws="http://www.ftn.uns.ac.rs/banka"
     xmlns:mt102="http://www.ftn.uns.ac.rs/mt102"
     xmlns:mt103="http://www.ftn.uns.ac.rs/mt103"
     xmlns:mt90010="http://www.ftn.uns.ac.rs/mt90010"
@@ -83,7 +82,7 @@
     
 
     
-    <wsdl:portType name="BankaPort">
+    <wsdl:portType name="Banka">
         <wsdl:operation name="primiZahtevZaIzvod">
             <wsdl:input message="ws:primiZahtevZaIzvodRequest"></wsdl:input>
             <wsdl:output message="ws:primiZahtevZaIzvodResponse"></wsdl:output>
@@ -121,10 +120,10 @@
         
     </wsdl:portType>
     
-    <wsdl:binding name="BankaBinding" type="ws:BankaPort">
+    <wsdl:binding name="BankaServiceBinding" type="ws:Banka">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="primiZahtevZaIzvod">
-            <soap:operation soapAction=""/>
+            <soap:operation soapAction="" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -134,7 +133,7 @@
         </wsdl:operation>
         
         <wsdl:operation name="primiNalogZaPlacanje">
-            <soap:operation soapAction=""/>
+            <soap:operation soapAction="" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -144,7 +143,7 @@
         </wsdl:operation>
         
         <wsdl:operation name="primiMT103">
-            <soap:operation soapAction=""/>
+            <soap:operation soapAction="" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -154,7 +153,7 @@
         </wsdl:operation>
         
         <wsdl:operation name="primiMT910">
-            <soap:operation soapAction=""/>
+            <soap:operation soapAction="" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -164,7 +163,7 @@
         </wsdl:operation>
         
         <wsdl:operation name="primiMT102">
-            <soap:operation soapAction=""/>
+            <soap:operation soapAction="" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -174,7 +173,7 @@
         </wsdl:operation>
         
         <wsdl:operation name="primiMT900">
-            <soap:operation soapAction=""/>
+            <soap:operation soapAction="" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -184,7 +183,7 @@
         </wsdl:operation>
         
         <wsdl:operation name="odradiClearing">
-            <soap:operation soapAction=""/>
+            <soap:operation soapAction="" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -196,8 +195,8 @@
     </wsdl:binding>
     
     <wsdl:service name="BankaService">
-        <wsdl:port name="BankaPort" binding="ws:BankaBinding">
-            <soap:address location="http://localhost:8080/BankaPort"/>
+        <wsdl:port name="BankaPort" binding="ws:BankaServiceBinding">
+            <soap:address location="http://localhost:8080/Banka"/>
         </wsdl:port>
     </wsdl:service>
     
