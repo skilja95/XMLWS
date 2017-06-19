@@ -1,4 +1,4 @@
-<project name="JAX-WS (Example 3)" default="main" basedir=".">
+<project name="Banka_XML" default="main" basedir=".">
 
 	<property file="ant.properties" />
 
@@ -93,9 +93,7 @@
 	<target name="generate-code">
 		<echo level="info" message="Generating code using wsdl2java..."/>
 		
-		<wsdl2java file="${wsdl.dir}/HelloDocument.wsdl"/>
-		<wsdl2java file="${wsdl.dir}/AddressBook.wsdl"/>
-		<wsdl2java file="${wsdl.dir}/Racun.wsdl"/>
+		<wsdl2java file="${wsdl.dir}/Banka.wsdl"/>
 	   
 	</target>
 	

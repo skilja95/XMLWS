@@ -26,10 +26,10 @@
 
 
 	<jaxws:endpoint 
-		id="address" 
-		address="/AddressBook"
-		implementor="yu.ac.ns.ftn.informatika.ws.address.AddressBookImpl"
-		wsdlLocation="WEB-INF/wsdl/AddressBook.wsdl"/>
+		id="banka" 
+		address="/Banka"
+		implementor="rs.ac.uns.ftn.banka.BankaPortImpl"
+		wsdlLocation="WEB-INF/wsdl/Banka.wsdl"/>
 		
 
 </beans>
