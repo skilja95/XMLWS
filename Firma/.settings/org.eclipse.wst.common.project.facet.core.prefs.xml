@@ -1,0 +1,7 @@
+<root>
+  <facet id="jpt.jaxb">
+    <node name="classgen">
+      <attribute name="package" value="rs.ac.uns.ftn.mt90010"/>
+    </node>
+  </facet>
+</root>
