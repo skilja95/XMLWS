@@ -1,7 +1,7 @@
 <project name="Firma" default="main" basedir=".">
 
 	<property file="ant.properties" />
-
+	
 	<property name="bin.dir" value="${basedir}/bin"/>
 	<property name="src.dir" value="${basedir}/src"/>
 	<property name="lib.dir" value="${basedir}/lib"/>
@@ -9,6 +9,7 @@
 	<property name="gen.dir" value="${basedir}/gen"/>
 	<property name="webinf.dir" value="${basedir}/WEB-INF"/>
 	<property name="wsdl.dir" value="WEB-INF/wsdl"/>
+	<property name="webcontent.dir" value="${basedir}/WebContent"/>
 	
 	<target name="check-war-name" unless="war.name">
 		<fail>
@@ -128,6 +129,9 @@
 			<webinf dir="${webinf.dir}">
 				<include name="wsdl/**"/>
 				<include name="cxf-servlet.xml"/>
+			</webinf>
+			<webinf dir="${webcontent.dir}">
+				<include name="**"/>
 			</webinf>
 		</war>
 	</target>

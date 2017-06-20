@@ -3,11 +3,41 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Load file</title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/toastr.min.js"></script>
+
+<script type="text/javascript" src="js/main.js"></script>
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/toastr.min.css" rel="stylesheet" />
 </head>
 <body>
-<form method="post" action="http://localhost:8080/firma/main/loadFile/">
-<input type="text" id="file" required>
-<button type="submit">Send file</button>
-</form>
+	<div class="row">
+		<div class="panel panel-primary filterable">
+			<div class="col-sm-5" style="margin-left: 400px;">
+				<div class="panel panel-default">
+					<div class="panel-body form-horizontal ">
+						<form method="post" class="searchForm">
+
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">File name </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="searchField"
+											style="width: 330px;">
+									</div>
+								</div>
+							</div>
+
+
+							<button class="btn btn-primary generate" type="submit">Send file</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 </body>
 </html>

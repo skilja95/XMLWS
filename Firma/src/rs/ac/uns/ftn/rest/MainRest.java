@@ -4,8 +4,10 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -14,6 +16,7 @@ import javax.xml.ws.Service;
 
 import rs.ac.uns.ftn.firma.Firma;
 import rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos;
+import utils.Pom;
 
 
 @Path("/main")
@@ -21,10 +24,13 @@ public class MainRest {
 	
     @POST
     @Path("/loadFile/")
-    public void loadFile() throws JAXBException, MalformedURLException {
+    @Consumes({MediaType.APPLICATION_XML})
+    public String loadFile(Pom pom) throws JAXBException, MalformedURLException {
+    	try {
        System.out.println("\nPogodio load file rest controller");
        System.out.println("\nJAXB unmarshalling.\n");
-		
+		System.out.println("\nPrimio file sa nazivom " + pom.getSearchField().trim());
+		String nazivFajla = pom.getSearchField().trim();
 		// Definiše se JAXB kontekst (putanja do paketa sa JAXB bean-ovima)
 		JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.nalogzaprenos");
 		
@@ -32,8 +38,7 @@ public class MainRest {
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		
 		// Unmarshalling generiše objektni model na osnovu XML fajla 
-		//Nalozi nalozi = (Nalozi) unmarshaller.unmarshal(new File(nazivFajla/*primjerXml.xml"*/));
-		NalogZaPrenos nalog = (NalogZaPrenos) unmarshaller.unmarshal(new File("C:\\Users\\skilj\\Desktop\\Firma\\xmlovi\\NalogZaPrenos.xml"));
+		NalogZaPrenos nalog = (NalogZaPrenos) unmarshaller.unmarshal(new File("C:\\Users\\skilj\\Desktop\\Firma\\xmlovi\\"+nazivFajla+".xml"));
         System.out.println("\nXML fajl je uspjesno ucitan");
         /*
          * Kreiranje konekcije ka servisu FIRME
@@ -47,5 +52,10 @@ public class MainRest {
     	Firma firma = service.getPort(portName,Firma.class);
 
     	firma.posaljiNalogZaPrenos(nalog);
+    	return "OK";
+    	} catch (Exception e) {
+    		System.out.println("Error in reading file.Check file name!");
+    		return "ERROR";
+    	}
     }
 }
