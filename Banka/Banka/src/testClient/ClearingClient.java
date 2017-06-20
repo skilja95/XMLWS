@@ -1,13 +1,26 @@
 package testClient;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
 import rs.ac.uns.ftn.banka.Banka;
+import rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos;
+import rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos.PodaciOUplati;
+import rs.ac.uns.ftn.xmlws.Status;
+import rs.ac.uns.ftn.xmlws.TRacun;
 
 
 
@@ -17,7 +30,7 @@ import rs.ac.uns.ftn.banka.Banka;
 public class ClearingClient {
 
 	
-	public void testIt() {
+	public void testClearing() {
 		try {
 			
 			
@@ -31,15 +44,6 @@ public class ClearingClient {
 	    	Banka banka = service.getPort(portName,Banka.class);
 	    	
 	    	banka.odradiClearing();
-	    	
-	        //BankaPort banka = service.getPort(portName, BankaPort.class);
-			
-			
-	        
-	        //banka.odradiClearing();
-	        
-	        
-	
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -47,10 +51,13 @@ public class ClearingClient {
 
 	}
 	
+	
+	
 	public static void main(String[] args) {
 		ClearingClient test = new ClearingClient();
 		
-		test.testIt();
+		test.testClearing();
+		//test.testPrimiNalogZaPlacanje();
 	}
 	
 }

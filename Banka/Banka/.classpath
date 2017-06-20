@@ -15,5 +15,8 @@
 	<classpathentry kind="lib" path="lib/neethi-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/xmlschema-core-2.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.42-bin.jar"/>
+	<classpathentry kind="lib" path="lib/ormlite-core-5.0.jar"/>
+	<classpathentry kind="lib" path="lib/ormlite-jdbc-5.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
