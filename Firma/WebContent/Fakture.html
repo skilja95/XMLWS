@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Load file</title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/toastr.min.js"></script>
+
+<script type="text/javascript" src="js/fakture.js"></script>
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/toastr.min.css" rel="stylesheet" />
+</head>
+<body>
+	<!-------------------------------- Header ------------------------------------>
+	<nav class="navbar navbar-default navbar-default"
+		style="border-radius: 0px !important; margin-bottom: 0px;">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+					aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">FIRMA</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+
+				<ul class="nav navbar-nav">
+					<li><a id="#" href="LoadFile.html">Nalog za prenos</a></li>
+					<li><a id="#" href="LoadZZI.html">Zahtev za izvod</a></li>
+					<li><a id="#" href="Fakture.html">Fakture</a></li>
+				</ul>
+
+				
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
+	<!--------------------------------- End Header -------------------------------------------->
+	
+<br>
+	<div class="row">
+		<div class="panel panel-primary filterable">
+			<div class="col-sm-5" style="margin-left: 400px;">
+				<div class="panel panel-default">
+					<div class="panel-body form-horizontal ">
+						<form method="post" class="fakturaForm">
+							<hr>
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">ID poruke: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="idPoruke" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Broj racuna: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="brojRacuna" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Datum racuna: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="datumRacuna" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Vrednost robe: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="vrednostRobe" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Vrednost usluga: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="vrednostUsluga" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+								<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Ukupno roba iz usluge: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="ukupnoRobaIUsluge" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+								<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Ukupan rabat: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="ukupanRabat" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+								<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Ukupan porez: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="ukupanPorez" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+								<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Oznaka valute: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="oznakaValute" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+								<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Iznos za uplatu: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="iznosZaUplatu" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+									<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Uplata na racun: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="uplataNaRacun" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Datum valute: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="datumValute" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Kupac naziv: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="kupacNaziv" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Kupac adresa: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="kupacAdresa" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Kupac pib: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="kupacPib" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+								<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Dobavljac naziv: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="dobavljacNaziv" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Dobavljac adresa: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="dobavljacAdresa" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Dobavljac pib: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="dobavljacPib" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							<!-- KRAJ ZAGLAVLJA -->
+							<hr>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Redni broj: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="redniBroj" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Naziv robe ili usluge: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="nazivRobeIliUsluge" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Kolicina: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="kolicina" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Jedinica mere: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="jedinicaMere" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Jedinicna cena: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="jedinicnaCena" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Vrednost: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="vrednost" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Procenat rabata: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="procenatRabata" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Iznos rabata: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="iznosRabata" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Umanjeno za rabat: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="umanjenoZaRabat" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="concept" class="col-sm-3 control-label">Ukupan porez: </label>
+								<div class="col-sm-4">
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="ukupanPorez1" style="width: 330px;">
+									</div>
+								</div>
+							</div>
+							
+							<button class="btn btn-primary generate" type="submit">Send data</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

@@ -14,6 +14,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import rs.ac.uns.ftn.faktura.Faktura;
 import rs.ac.uns.ftn.firma.Firma;
 import rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos;
 import rs.ac.uns.ftn.zahtevzaizvod.ZahtevZaIzvod;
@@ -93,6 +94,22 @@ public class MainRest {
 			Firma firma = service.getPort(portName, Firma.class);
 
 			firma.posaljiZahtevZaIzvod(zahtev);
+			return "OK";
+		} catch (Exception e) {
+			System.out.println("\nError in reading file. Check file name!");
+			return "ERROR";
+		}
+	}
+	
+	@POST
+	@Path("/obradiFakturu/")
+	@Consumes({ MediaType.APPLICATION_XML })
+	public String obradiFakturu(Faktura faktura) throws JAXBException, MalformedURLException {
+		try {
+			System.out.println("\nPogodio load file rest controller");
+			System.out.println("\nBroj racuna je: " +faktura.getZaglavljeFakture().getBrojRacuna());
+			
+
 			return "OK";
 		} catch (Exception e) {
 			System.out.println("\nError in reading file. Check file name!");
