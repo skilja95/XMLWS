@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="http://ftn.uns.ac.rs/mt103" xmlns:mt103="http://ftn.uns.ac.rs/mt103">
+    targetNamespace="http://www.ftn.uns.ac.rs/mt103" xmlns:mt103="http://www.ftn.uns.ac.rs/mt103">
 
     <xs:element name="MT_103">
         <xs:complexType>
@@ -61,7 +61,7 @@
         <xs:sequence>
             <xs:element name="broj_racuna">
                 <xs:simpleType>
-                    <xs:restriction base="TBrojRacuna"/>
+                    <xs:restriction base="mt103:TBrojRacuna"/>
                 </xs:simpleType>
             </xs:element>
             <xs:element name="broj_modela">

@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="http://www.ftn.uns.ac.rs/mt102" xmlns:mt102="http://www.ftn.uns.ac.rs/mt102"
-    xmlns:upl="http://www.ftn.uns.ac.rs/nalogZaPrenos">
+    targetNamespace="http://www.ftn.uns.ac.rs/xmlws" xmlns:gl="http://www.ftn.uns.ac.rs/xmlws">
 
-    <xs:import namespace="http://www.ftn.uns.ac.rs/nalogZaPrenos" schemaLocation="NalogZaPrenos.xsd"/>
-    <xs:element name="mt102">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="IdPoruke" type="mt102:TIDPoruke"/>
-                <xs:element name="SwiftKodBankeDuznika" type="mt102:TSWIFT"/>
-                <xs:element name="ObracunskiRacunBankeDuznika" type="mt102:TBrojRacuna"/>
-                <xs:element name="SwiftKodBankePoverioca" type="mt102:TSWIFT"/>
-                <xs:element name="ObracunskiRacunBankePoverioca" type="mt102:TBrojRacuna"/>
-                <xs:element name="UkupanIznos" type="mt102:TIznos"/>
-                <xs:element name="SifraValute" type="mt102:TOznaka_valute"/>
-                <xs:element name="DatumValute" type="xs:date"/>
-                <xs:element name="Datum" type="xs:date"/>
-                <xs:element maxOccurs="unbounded" ref="upl:nalog_za_prenos"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
     <xs:simpleType name="TBrojRacuna">
         <xs:restriction base="xs:string">
             <xs:pattern value="\d{3}-\d{13}-\d{2}"/>
@@ -29,7 +11,7 @@
         <xs:sequence>
             <xs:element name="broj_racuna">
                 <xs:simpleType>
-                    <xs:restriction base="mt102:TBrojRacuna"/>
+                    <xs:restriction base="gl:TBrojRacuna"/>
                 </xs:simpleType>
             </xs:element>
             <xs:element name="broj_modela">
@@ -54,10 +36,20 @@
             <xs:minLength value="1"/>
         </xs:restriction>
     </xs:simpleType>
+    <xs:simpleType name="TPIB">
+        <xs:restriction base="xs:string">
+            <xs:length value="11"/>
+        </xs:restriction>
+    </xs:simpleType>
     <xs:simpleType name="TSWIFT">
         <xs:restriction base="xs:string">
             <xs:length value="8"/>
             <xs:pattern value="[A-Z]{6}[A-Z1-9]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TAdresa">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="255"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="TOznaka_valute">
@@ -71,4 +63,12 @@
             <xs:fractionDigits value="2"/>
         </xs:restriction>
     </xs:simpleType>
+    <xs:element name="status">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="statusCode" type="xs:int"/>
+                <xs:element name="statusText" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions 
+	name ="BankaService"
+    targetNamespace="http://www.ftn.uns.ac.rs/centralnaBanka"
+    xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+    xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    
+    xmlns:ws="http://www.ftn.uns.ac.rs/centralnaBanka"
+    xmlns:fak="http://www.ftn.uns.ac.rs/faktura"
+    xmlns:mt102="http://www.ftn.uns.ac.rs/mt102"
+    xmlns:mt103="http://www.ftn.uns.ac.rs/mt103"
+    xmlns:mt90010="http://www.ftn.uns.ac.rs/mt90010"
+    xmlns:nzp="http://www.ftn.uns.ac.rs/nalogZaPrenos"
+    xmlns:presek="http://www.ftn.uns.ac.rs/presek"
+    xmlns:utils="http://www.ftn.uns.ac.rs/xmlws"
+    xmlns:zzi="http://www.ftn.uns.ac.rs/ZahtevZaIzvod"
+    >
+    
+    <wsdl:types>
+        <xsd:schema>
+            <xsd:import schemaLocation="Faktura.xsd" namespace="http://www.ftn.uns.ac.rs/faktura"></xsd:import>
+            <xsd:import schemaLocation="mt102.xsd" namespace="http://www.ftn.uns.ac.rs/mt102"></xsd:import>
+            <xsd:import schemaLocation="mt103.xsd" namespace="http://www.ftn.uns.ac.rs/mt103"></xsd:import>
+            <xsd:import schemaLocation="mt900-10.xsd" namespace="http://www.ftn.uns.ac.rs/mt90010"></xsd:import>
+            <xsd:import schemaLocation="NalogZaPrenos.xsd" namespace="http://www.ftn.uns.ac.rs/nalogZaPrenos"></xsd:import>
+            <xsd:import schemaLocation="Presek.xsd" namespace="http://www.ftn.uns.ac.rs/presek"></xsd:import>
+            <xsd:import schemaLocation="Utils.xsd" namespace="http://www.ftn.uns.ac.rs/xmlws"></xsd:import>
+            <xsd:import schemaLocation="ZahtevZaIzvod.xsd" namespace="http://www.ftn.uns.ac.rs/ZahtevZaIzvod"></xsd:import>
+        </xsd:schema>
+    </wsdl:types>
+   
+    <wsdl:message name="primiMT103Request">
+        <wsdl:part name="mt103" element = "mt103:MT_103"/>
+    </wsdl:message>
+    <wsdl:message name="primiMT103Response">
+        <wsdl:part name="response" element="utils:status"></wsdl:part>
+    </wsdl:message>
+    
+    <wsdl:message name="primiMT102Request">
+        <wsdl:part name="mt102" element = "mt102:mt102"/>
+    </wsdl:message>
+    <wsdl:message name="primiMT102Response">
+        <wsdl:part name="response" element="utils:status"></wsdl:part>
+    </wsdl:message>
+    
+    <wsdl:portType name="CentralnaBanka">
+        <wsdl:operation name="primiMT103">
+            <wsdl:input message="ws:primiMT103Request"></wsdl:input>
+            <wsdl:output message="ws:primiMT103Response"></wsdl:output>  		
+        </wsdl:operation>
+        
+        <wsdl:operation name="primiMT102">
+            <wsdl:input message="ws:primiMT102Request"></wsdl:input>
+            <wsdl:output message="ws:primiMT102Response"></wsdl:output>  		
+        </wsdl:operation>
+    </wsdl:portType>
+    
+    <wsdl:binding name="CentralnaBankaServiceBinding" type="ws:CentralnaBanka">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="primiMT103">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+        <wsdl:operation name="primiMT102">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <wsdl:service name="CentralnaBankaService">
+        <wsdl:port name="CentralnaBankaPort" binding="ws:CentralnaBankaServiceBinding">
+            <soap:address location="http://localhost:8080/CentralnaBanka"/>
+        </wsdl:port>
+    </wsdl:service>
+    
+</wsdl:definitions>
