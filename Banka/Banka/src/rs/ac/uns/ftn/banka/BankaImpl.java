@@ -7,7 +7,15 @@
 package rs.ac.uns.ftn.banka;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -15,6 +23,8 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -24,7 +34,14 @@ import com.j256.ormlite.table.TableUtils;
 import dbModels.BankaDB;
 import dbModels.KlijentDB;
 import dbModels.NalogZaPrenosDB;
+import dbModels.ServisNalogDB;
 import dbModels.StavkaDB;
+import help.Trojka;
+import rs.ac.uns.ftn.mt102.Mt102;
+import rs.ac.uns.ftn.mt103.MT103;
+import rs.ac.uns.ftn.mt103.TRacun;
+import rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos;
+import rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos.PodaciOUplati;
 import rs.ac.uns.ftn.xmlws.Status;
 
 /**
@@ -51,6 +68,90 @@ public class BankaImpl implements Banka {
 	private Dao<KlijentDB, Integer> klijentDAO;
 	private Dao<StavkaDB, Integer> stavkaDAO;
 	private Dao<NalogZaPrenosDB, Integer> nzpDAO;
+	private Dao<ServisNalogDB, Integer> snDAO;
+	
+	
+	public static String generateRandomString()
+	{
+		
+		ArrayList<String> locan = new ArrayList<String>();
+		locan.add("Q");
+		locan.add("W");
+		locan.add("E");
+		locan.add("R");
+		locan.add("T");
+		locan.add("Y");
+		locan.add("U");
+		locan.add("I");
+		locan.add("O");
+		locan.add("P");
+		locan.add("A");
+		locan.add("S");
+		locan.add("D");
+		locan.add("F");
+		locan.add("G");
+		locan.add("H");
+		locan.add("J");
+		locan.add("K");
+		locan.add("L");
+		locan.add("Z");
+		locan.add("X");
+		locan.add("C");
+		locan.add("V");
+		locan.add("B");
+		locan.add("N");
+		locan.add("M");
+		locan.add("q");
+		locan.add("w");
+		locan.add("e");
+		locan.add("r");
+		locan.add("t");
+		locan.add("y");
+		locan.add("u");
+		locan.add("i");
+		locan.add("o");
+		locan.add("p");
+		locan.add("a");
+		locan.add("s");
+		locan.add("d");
+		locan.add("f");
+		locan.add("g");
+		locan.add("h");
+		locan.add("j");
+		locan.add("k");
+		locan.add("l");
+		locan.add("z");
+		locan.add("x");
+		locan.add("c");
+		locan.add("v");
+		locan.add("b");
+		locan.add("n");
+		locan.add("m");
+		locan.add("0");
+		locan.add("1");
+		locan.add("2");
+		locan.add("3");
+		locan.add("4");
+		locan.add("5");
+		locan.add("6");
+		locan.add("7");
+		locan.add("8");
+		locan.add("9");
+		
+		Random generator = new Random();
+		
+		String retx = "";
+		
+		for(int i=0; i<10; i++)
+		{
+			int numb = generator.nextInt(62);
+			retx=retx+locan.get(numb);
+			
+		}
+		
+		return retx;
+		
+	}
     
     /* (non-Javadoc)
      * @see rs.ac.uns.ftn.banka.Banka#primiNalogZaPlacanje(rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos  nalogZaPrenos )*
@@ -67,11 +168,13 @@ public class BankaImpl implements Banka {
 			klijentDAO = DaoManager.createDao(connectionSource, KlijentDB.class);
 			stavkaDAO = DaoManager.createDao(connectionSource, StavkaDB.class);
 			nzpDAO = DaoManager.createDao(connectionSource, NalogZaPrenosDB.class);
+			snDAO = DaoManager.createDao(connectionSource, ServisNalogDB.class);
 			
 			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
 			TableUtils.createTableIfNotExists(connectionSource, KlijentDB.class);
 			TableUtils.createTableIfNotExists(connectionSource, StavkaDB.class);
 			TableUtils.createTableIfNotExists(connectionSource, NalogZaPrenosDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, ServisNalogDB.class);
         	
         	ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
         	
@@ -198,7 +301,7 @@ public class BankaImpl implements Banka {
         				}
         			}
         			
-        			prethodnoStanjeZaPrimaoca=maxStavka.getTrenutnoStanje();
+        			prethodnoStanjeZaDuznika=maxStavka.getTrenutnoStanje();
         		}
         		
         		double izn = nalogZaPrenos.getPodaciOUplati().getIznos().doubleValue();
@@ -272,13 +375,48 @@ public class BankaImpl implements Banka {
         		{
         			System.out.println(" HITNO ILI VECE OD 250000, DAKLE RTGS TRANSFER! =====");
         			//TODO: Ne zaboraviti staviti da je obradjeno!
+        			MT103 mt103 = new MT103();
+        			
+        			String mt103ID = generateRandomString();
+        			
+        			mt103.setDatumNaloga(nalogZaPrenos.getPodaciOUplati().getDatumNaloga());
+        			mt103.setDatumValute(nalogZaPrenos.getPodaciOUplati().getDatumValute());
+        			mt103.setDuznikNalogodavac(nalogZaPrenos.getDuznik());
+        			mt103.setIDPoruke(mt103ID);
+        			mt103.setIznos(nalogZaPrenos.getPodaciOUplati().getIznos());
+        			mt103.setObracunskiRacunBankeDuznika(klDuznik.getBanka().getObracunskiRacun());
+        			mt103.setObracunskiRacunBankePoverioca(klPrimaoc.getBanka().getObracunskiRacun());
+        			mt103.setPrimalacPoverilac(nalogZaPrenos.getPrimalac());
+        				TRacun trDuz = new TRacun();
+        				trDuz.setBrojModela(nalogZaPrenos.getPodaciOUplati().getRacunDuznika().getBrojModela());
+        				trDuz.setBrojRacuna(nalogZaPrenos.getPodaciOUplati().getRacunDuznika().getBrojRacuna());
+        				trDuz.setPozivNaBroj(nalogZaPrenos.getPodaciOUplati().getRacunDuznika().getPozivNaBroj());
+        				TRacun trPov = new TRacun();
+        				trPov.setBrojModela(nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getBrojModela());
+        				trPov.setBrojRacuna(nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getBrojRacuna());
+        				trPov.setPozivNaBroj(nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getPozivNaBroj());
+        			mt103.setRacunDuznika(trDuz);
+        			mt103.setRacunPoverioca(trPov);
+        			mt103.setSifraValute(nalogZaPrenos.getPodaciOUplati().getOznakaValute());
+        			mt103.setSvrhaPlacanja(nalogZaPrenos.getSvrhaPlacanja());
+        			mt103.setSWIFTKodBankeDuznika(klDuznik.getBanka().getSwift());
+        			mt103.setSWIFTKodBankePoverioca(klPrimaoc.getBanka().getSwift());
+        			
+        			ServisNalogDB sndb = new ServisNalogDB(mt103ID,nalogZaPrenos.getIdPoruke());
+        			snDAO.create(sndb);
+        			
+        			//TODO: Poslati sad ovo na RTGS kao 103
+        			
+        			
+        			
+        			
         			
         		}
         		else
         		{
         			System.out.println(" CLEARING SERVIS CE DA OBAVI OVO! =================");
         			
-        			
+        			//TODO: ... kontam ono nista ? to se radi u clearingu..
         		}
         	}
         	
@@ -308,90 +446,262 @@ public class BankaImpl implements Banka {
 			klijentDAO = DaoManager.createDao(connectionSource, KlijentDB.class);
 			stavkaDAO = DaoManager.createDao(connectionSource, StavkaDB.class);
 			nzpDAO = DaoManager.createDao(connectionSource, NalogZaPrenosDB.class);
+			snDAO = DaoManager.createDao(connectionSource, ServisNalogDB.class);
 			
 			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
 			TableUtils.createTableIfNotExists(connectionSource, KlijentDB.class);
 			TableUtils.createTableIfNotExists(connectionSource, StavkaDB.class);
 			TableUtils.createTableIfNotExists(connectionSource, NalogZaPrenosDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, ServisNalogDB.class);
+			
+			
+			
+			ArrayList<NalogZaPrenosDB> sviNalozi = (ArrayList<NalogZaPrenosDB>)  nzpDAO.queryForAll();
+			ArrayList<NalogZaPrenosDB> sviNeObradjeniNalozi= new ArrayList<NalogZaPrenosDB>();
+			
+			for(NalogZaPrenosDB nzpdb : sviNalozi)
+			{
+				if(nzpdb.isObradjeno()==false)
+				{
+					sviNeObradjeniNalozi.add(nzpdb);
+				}
+			}
+			
+			HashMap<BankaDB,ArrayList<NalogZaPrenosDB>> sviZaClearing = new HashMap<BankaDB,ArrayList<NalogZaPrenosDB>>();
+			
+			ArrayList<BankaDB> sveBanke = (ArrayList<BankaDB>) bankaDAO.queryForAll();
+			ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
+			
+			for(BankaDB bdb : sveBanke)
+			{
+				ArrayList<NalogZaPrenosDB> sviNZPNeObradjeniOdBanke = new ArrayList<NalogZaPrenosDB>();
+				sviZaClearing.put(bdb, sviNZPNeObradjeniOdBanke);
+			}
+			
+			for(NalogZaPrenosDB nzpdb : sviNeObradjeniNalozi)
+			{
+				KlijentDB klijentPrimaoc = null;
+				for(KlijentDB kldb : sviKlijenti)
+				{
+					if(nzpdb.getBrojRacunaPrimaoca().equals(kldb.getBrojRacuna()))
+					{
+						klijentPrimaoc=kldb;
+						break;
+					}
+				}
+				if(klijentPrimaoc!=null)
+				{
+					
+					Iterator it = sviZaClearing.entrySet().iterator();
+				    while (it.hasNext()) {
+				        Map.Entry pair = (Map.Entry)it.next();
+				        
+				        if(((BankaDB)pair.getKey()).getId()==klijentPrimaoc.getBanka().getId())
+				        {
+				        	((ArrayList<NalogZaPrenosDB>)pair.getValue()).add(nzpdb);
+				        }
+				        
+				    }
+				    
+				    
+					
+					//sviZaClearing.get(klijentPrimaoc.getBanka()).add(nzpdb);
+					
+				}
+				else
+				{
+					System.out.println("Desilo se nesto cudno u kliringu za klijentaPrimaoca");
+				}
+				
+			}
+			
+			//istestirati ovo dobro!
+			
+			
+			//TODO: sad od ovih svih sviZaClearing napraviti za svaku bankgu sta ide MT102 i ono sve..
+			
+			
+			Iterator it = sviZaClearing.entrySet().iterator();
+		    while (it.hasNext()) {
+		        Map.Entry pair = (Map.Entry)it.next();
+		        
+		        //TODO: Rasparcati sve tako da ide iz jedne banke za drugu i sve tako u parove
+		        // ne moze biti izmjesano ..
+		        //TODO: Sad ovde za svaki nzpDB iz liste napraviti pravi NZP
+		        //TODO: Posabirat sve iznose za transfer ukupnu sumu
+		        //TODO: oformiti MT102 i poslati ga..
+		        
+		        ArrayList<NalogZaPrenosDB> nzpojb = (ArrayList<NalogZaPrenosDB>) pair.getValue();
+		        ArrayList<Trojka> listaTrojki = new ArrayList<Trojka>();
+		        
+		        
+		        for(NalogZaPrenosDB nz : nzpojb)
+		        {
+		        	KlijentDB kliDuz = null;
+		        	for(KlijentDB kl : sviKlijenti)
+		        	{
+		        		if(nz.getBrojRacunaDuznika().equals(kl.getBrojRacuna()))
+		        		{
+		        			kliDuz = kl;
+		        			break;
+		        		}
+		        	}
+		        	
+		        	BankaDB bankaDuznik = null;
+		        	if(kliDuz!=null)
+		        	{
+		        		bankaDuznik=kliDuz.getBanka();
+		        	}
+		        	else
+		        	{
+		        		System.out.println("Doslo do cudnovatog dejstva");
+		        	}
+		        	
+		        	if(bankaDuznik!=null)
+		        	{
+		        		int brojac=0;
+		        		boolean naslo=false;
+		        		for(Trojka tr: listaTrojki)
+		        		{
+		        			if(tr.getBankaDuznik().getId()==bankaDuznik.getId() && tr.getBankaPrimaoc().getId()==((BankaDB)pair.getKey()).getId())
+		        			{
+		        				naslo=true;
+		        				break;
+		        			}
+		        			brojac++;
+		        		}
+
+		        		if(naslo==true)
+		        		{
+		        			listaTrojki.get(brojac).getListaNaloga().add(nz);
+		        			System.out.println("POSTOJI VEC U BAZI TAKO DA SAMO STAKUJE: BD:"+bankaDuznik.getId()+", BP: "+((BankaDB)pair.getKey()).getId());
+		        		}
+		        		else
+		        		{
+
+		        			Trojka trojkica = new Trojka(bankaDuznik, ((BankaDB)pair.getKey()));
+		        			trojkica.getListaNaloga().add(nz);
+		        			listaTrojki.add(trojkica);
+		        			System.out.println("Ne postoji u bazi tako da pravi novu trojku: BD:"+bankaDuznik.getId()+", BP: "+((BankaDB)pair.getKey()).getId());
+
+
+		        		}
+		        	}
+		        	else
+		        	{
+		        		System.out.println("Doslo do goleme greske ... nije moglo naci banku.. :( ");
+		        	}
+		        	
+		        	
+		        	
+		        	
+		        }
+		        
+		        for(Trojka tro : listaTrojki)
+	        	{
+	        		double ukupnaSuma = 0;
+	        		Mt102 mt102 = new Mt102();
+	        		
+	        		String mt102ID = generateRandomString();
+	        		
+	        		mt102.setIdPoruke(mt102ID);
+	        		String valuta = "";
+	        		mt102.getNalogZaPrenos();
+	        		
+	        		ArrayList<NalogZaPrenos> praviNalozZaPrenos = new ArrayList<NalogZaPrenos>();
+	        		for(NalogZaPrenosDB nzpdbx : tro.getListaNaloga())
+	        		{
+	        			double iznos = nzpdbx.getIznos();
+	        			ukupnaSuma = ukupnaSuma+iznos;
+	        			
+	        			NalogZaPrenos nzpTrue = new NalogZaPrenos();
+	        			nzpTrue.setDuznik(nzpdbx.getDuznik());
+	        			nzpTrue.setIdPoruke(nzpdbx.getIdPoruke());
+	        			nzpTrue.setPrimalac(nzpdbx.getPrimalac());
+	        			nzpTrue.setSvrhaPlacanja(nzpdbx.getSvrhaPlacanja());
+	        				PodaciOUplati pou = new PodaciOUplati();
+	        			
+	        					GregorianCalendar c = new GregorianCalendar();
+	                			c.setTime(nzpdbx.getDatumNaloga());
+	                			XMLGregorianCalendar datNal = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+	                	
+	                			GregorianCalendar c1 = new GregorianCalendar();
+	                			c1.setTime(nzpdbx.getDatumValute());
+	                			XMLGregorianCalendar datVal = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+	                	
+	                		pou.setDatumNaloga(datNal);
+	                		pou.setDatumValute(datVal);
+	                		pou.setHitno(nzpdbx.isHitno());
+	                		pou.setIznos(BigDecimal.valueOf(iznos));
+	                		pou.setOznakaValute(nzpdbx.getOznakaValute());
+			                	rs.ac.uns.ftn.xmlws.TRacun rduz = new rs.ac.uns.ftn.xmlws.TRacun();
+			                	rduz.setBrojModela(BigInteger.valueOf(nzpdbx.getBrojModelaDuznika()));
+			                	rduz.setBrojRacuna(nzpdbx.getBrojRacunaDuznika());
+			                	rduz.setPozivNaBroj(nzpdbx.getPozivNaBrojDuznika());
+			                	
+			                	rs.ac.uns.ftn.xmlws.TRacun rprim = new rs.ac.uns.ftn.xmlws.TRacun();
+			                	rprim.setBrojModela(BigInteger.valueOf(nzpdbx.getBrojModelaPrimaoca()));
+			                	rprim.setBrojRacuna(nzpdbx.getBrojRacunaPrimaoca());
+			                	rprim.setPozivNaBroj(nzpdbx.getPozivNaBrojPrimaoca());
+			                	
+			                pou.setRacunDuznika(rduz);
+			                pou.setRacunPoverioca(rprim);
+			             nzpTrue.setPodaciOUplati(pou);
+			             
+			             mt102.getNalogZaPrenos().add(nzpTrue);
+			             
+			             valuta=nzpdbx.getOznakaValute();
+			             
+			             praviNalozZaPrenos.add(nzpTrue);
+			             
+			             
+			             
+			             ServisNalogDB sndb = new ServisNalogDB(mt102ID,nzpdbx.getIdPoruke());
+			             snDAO.create(sndb);
+			             
+	        		}
+	        		
+	        		
+	        		Calendar calendar = Calendar.getInstance();
+	                Date date =  calendar.getTime();
+	                
+	                GregorianCalendar c = new GregorianCalendar();
+        			c.setTime(date);
+        			XMLGregorianCalendar datex = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+        	
+	        		
+	        		mt102.setDatum(datex);
+	        		mt102.setDatumValute(datex);
+	        		
+	        		
+	        		mt102.setObracunskiRacunBankeDuznika(tro.getBankaDuznik().getObracunskiRacun());
+	        		mt102.setObracunskiRacunBankePoverioca(tro.getBankaPrimaoc().getObracunskiRacun());
+	        		mt102.setSifraValute(valuta);
+	        		mt102.setSwiftKodBankeDuznika(tro.getBankaDuznik().getSwift());
+	        		mt102.setSwiftKodBankePoverioca(tro.getBankaPrimaoc().getSwift());
+	        		mt102.setUkupanIznos(BigDecimal.valueOf(ukupnaSuma) );
+	        		
+	        		
+	        		//TODO: POSLATI OVO NA KLIRING SERVIS .. sve vako jedno po jedno ko sto i radi
+	        		
+
+	        	}
+
+		        it.remove(); // avoids a ConcurrentModificationException
+		    }
+			
+			
         }
         catch(Exception e)
         {
         	e.printStackTrace();
         }
-        /*
-        JdbcConnectionSource connectionSource = null;
-		try {
-			// create our data source
-			connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
-			// setup our database and DAOs
-			//setupDatabase(connectionSource);
-			// read and write some data
-			//readWriteData();
-			System.out.println("\n\nIt seems to have worked\n\n");
-			System.out.println("OVO DRUGO NESTO");
-			
-			bankaDAO = DaoManager.createDao(connectionSource, BankaDB.class);
-			klijentDAO = DaoManager.createDao(connectionSource, KlijentDB.class);
-			
-			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
-			TableUtils.createTableIfNotExists(connectionSource, KlijentDB.class);
-			
-			
-			
-			
-			BankaDB bdb1 = new BankaDB("B1","BJEDRS22","111111111111111111");
-			bankaDAO.create(bdb1);
-			
-			BankaDB bdb2 = new BankaDB("B2","BDVARS22","222222222222222222");
-			bankaDAO.create(bdb2);
-			
-			ArrayList<BankaDB> sveBanke=(ArrayList<BankaDB>) bankaDAO.queryForAll();
-			
-			for(BankaDB bdb : sveBanke)
-			{
-				System.out.println("BANKA: id="+bdb.getId()+" , naziv: "+bdb.getNaziv());
-			}
-			
-			
-			KlijentDB kdb1 = new KlijentDB("Firma1","100000000000000000",bankaDAO.queryForId(1),200);
-			KlijentDB kdb2 = new KlijentDB("Firma2","200000000000000000",bankaDAO.queryForId(2),500);
-			KlijentDB kdb3 = new KlijentDB("Firma3","300000000000000000",bankaDAO.queryForId(1),100);
-			KlijentDB kdb4 = new KlijentDB("Firma4","400000000000000000",bankaDAO.queryForId(2),1200);
-			
-			
-			klijentDAO.create(kdb1);
-			klijentDAO.create(kdb2);
-			klijentDAO.create(kdb3);
-			klijentDAO.create(kdb4);
-			
-			ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
-			
-			for(KlijentDB kdb : sviKlijenti)
-			{
-				System.out.println("KLIJENT: "+kdb.getIme()+", Banka: "+kdb.getBanka().getId());
-			}
-			
-			connectionSource.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("NESTO JE VRISNULO");
-			e.printStackTrace();
-		}
-		finally {
-			 //destroy the data source which should close underlying connections
-			//if (connectionSource != null) {
-				//connectionSource.close();
-		}
-		
-		*/
+        
         try {
 
-        	
-        	
-        	
-        	
-            rs.ac.uns.ftn.xmlws.Status _return = null;
+            rs.ac.uns.ftn.xmlws.Status _return = new Status();
+            _return.setStatusCode(200);
+            _return.setStatusText("OK");
             return _return;
         } catch (java.lang.Exception ex) {
             ex.printStackTrace();
@@ -406,6 +716,22 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiZahtevZaIzvod");
         System.out.println(zahtevZaIzvod);
         try {
+        	
+        	JdbcConnectionSource connectionSource = null;
+        	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
+        	
+        	bankaDAO = DaoManager.createDao(connectionSource, BankaDB.class);
+			klijentDAO = DaoManager.createDao(connectionSource, KlijentDB.class);
+			stavkaDAO = DaoManager.createDao(connectionSource, StavkaDB.class);
+			nzpDAO = DaoManager.createDao(connectionSource, NalogZaPrenosDB.class);
+			snDAO = DaoManager.createDao(connectionSource, ServisNalogDB.class);
+			
+			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, KlijentDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, StavkaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, NalogZaPrenosDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, ServisNalogDB.class);
+        	
             rs.ac.uns.ftn.presek.Presek _return = null;
             return _return;
         } catch (java.lang.Exception ex) {
@@ -421,7 +747,12 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT910");
         System.out.println(mt910);
         try {
-            rs.ac.uns.ftn.xmlws.Status _return = null;
+        	
+        	System.out.println("STIGLO ODOBRENJE");
+        	
+            rs.ac.uns.ftn.xmlws.Status _return = new Status();
+            _return.setStatusCode(200);
+            _return.setStatusText("OK");
             return _return;
         } catch (java.lang.Exception ex) {
             ex.printStackTrace();
@@ -436,6 +767,127 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT900");
         System.out.println(mt900);
         try {
+        	
+        	JdbcConnectionSource connectionSource = null;
+        	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
+        	
+        	bankaDAO = DaoManager.createDao(connectionSource, BankaDB.class);
+			klijentDAO = DaoManager.createDao(connectionSource, KlijentDB.class);
+			stavkaDAO = DaoManager.createDao(connectionSource, StavkaDB.class);
+			nzpDAO = DaoManager.createDao(connectionSource, NalogZaPrenosDB.class);
+			snDAO = DaoManager.createDao(connectionSource, ServisNalogDB.class);
+			
+			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, KlijentDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, StavkaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, NalogZaPrenosDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, ServisNalogDB.class);
+        	
+        	
+			String mtID = mt900.getIDPoruke();
+			
+			// ODBITI PARE DUZNIKU / DUZNICIMA
+			
+			ArrayList<ServisNalogDB> servisiNalozi = (ArrayList<ServisNalogDB>) snDAO.queryForAll();
+			ArrayList<NalogZaPrenosDB> sviNaloziZaPrenos = (ArrayList<NalogZaPrenosDB>) nzpDAO.queryForAll();
+			ArrayList<NalogZaPrenosDB> naloziZaUpdate = new ArrayList<NalogZaPrenosDB>();
+			ArrayList<StavkaDB> sveStavke = (ArrayList<StavkaDB>) stavkaDAO.queryForAll();
+			ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
+			
+			
+			for(ServisNalogDB sndb: servisiNalozi)
+			{
+				if(sndb.getMtID().equals(mtID))
+				{
+					for(NalogZaPrenosDB nalzp : sviNaloziZaPrenos)
+					{
+						if(sndb.getNalogID().equals(nalzp.getIdPoruke()))
+						{
+							naloziZaUpdate.add(nalzp);
+						}
+					}
+				}
+			}
+			
+			for(NalogZaPrenosDB nzp: naloziZaUpdate)
+			{
+				nzp.setObradjeno(true);
+				nzpDAO.update(nzp);
+				
+				KlijentDB klDuznik =null;
+				
+				ArrayList<StavkaDB> stavkeDuznika = new ArrayList<StavkaDB>();
+				double prethodnoStanjeZaDuznika=0;
+				
+				for(KlijentDB kl:sviKlijenti)
+	        	{
+	        		if(kl.getBrojRacuna().equals(nzp.getBrojRacunaDuznika()))
+	        		{
+	        			klDuznik=kl;
+	        			break;
+	        		}
+	        	}
+				
+				if(klDuznik!=null)
+				{
+					
+					for(StavkaDB st : sveStavke)
+	        		{
+	        			if(st.getKlijent().getBrojRacuna().equals(klDuznik.getBrojRacuna()))
+	        			{
+	        				stavkeDuznika.add(st);
+	        			}
+	        		}
+					
+					if(stavkeDuznika.size()!=0)
+	        		{
+	        			StavkaDB maxStavka=stavkeDuznika.get(0);
+	        			
+	        			for(StavkaDB st: stavkeDuznika)
+	        			{
+	        				if(st.getId()>maxStavka.getId())
+	        				{
+	        					maxStavka=st;
+	        				}
+	        			}
+	        			
+	        			prethodnoStanjeZaDuznika=maxStavka.getTrenutnoStanje();
+	        		}
+					
+					NalogZaPrenosDB nalogZaPrenos = nzp;
+					
+					double izn = nalogZaPrenos.getIznos();
+	        		
+	        		StavkaDB stavkaDuznika = new StavkaDB(nalogZaPrenos.getDuznik(),
+	        				nalogZaPrenos.getSvrhaPlacanja(),nalogZaPrenos.getPrimalac(),
+	        				nalogZaPrenos.getOznakaValute(),
+	        				nalogZaPrenos.getIznos(),
+	        				nalogZaPrenos.getBrojRacunaDuznika(),
+	        				nalogZaPrenos.getBrojModelaDuznika(),
+	        				nalogZaPrenos.getPozivNaBrojDuznika(),
+	        				nalogZaPrenos.getBrojRacunaPrimaoca(),
+	        				nalogZaPrenos.getBrojModelaPrimaoca(),
+	        				nalogZaPrenos.getPozivNaBrojPrimaoca(),
+	        				nalogZaPrenos.getDatumValute(),
+	        				nalogZaPrenos.getDatumNaloga(),
+	        				"-",prethodnoStanjeZaDuznika,prethodnoStanjeZaDuznika-izn,klDuznik);
+	        		
+	        		stavkaDAO.create(stavkaDuznika);
+					
+					
+				}
+				else
+				{
+					System.out.println("Nije moglo naci klijenta za mt 900");
+				}
+				
+			}
+			
+			
+			
+			
+			
+			
             rs.ac.uns.ftn.xmlws.Status _return = null;
             return _return;
         } catch (java.lang.Exception ex) {
@@ -451,6 +903,121 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT102");
         System.out.println(mt102);
         try {
+        	
+        	JdbcConnectionSource connectionSource = null;
+        	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
+        	
+        	bankaDAO = DaoManager.createDao(connectionSource, BankaDB.class);
+			klijentDAO = DaoManager.createDao(connectionSource, KlijentDB.class);
+			stavkaDAO = DaoManager.createDao(connectionSource, StavkaDB.class);
+			nzpDAO = DaoManager.createDao(connectionSource, NalogZaPrenosDB.class);
+			snDAO = DaoManager.createDao(connectionSource, ServisNalogDB.class);
+			
+			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, KlijentDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, StavkaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, NalogZaPrenosDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, ServisNalogDB.class);
+			
+			
+			// DODATI PARE PRIMAOCIMA
+			
+			ArrayList<ServisNalogDB> servisiNalozi = (ArrayList<ServisNalogDB>) snDAO.queryForAll();
+			ArrayList<NalogZaPrenosDB> sviNaloziZaPrenos = (ArrayList<NalogZaPrenosDB>) nzpDAO.queryForAll();
+			ArrayList<NalogZaPrenosDB> naloziZaUpdate = new ArrayList<NalogZaPrenosDB>();
+			ArrayList<StavkaDB> sveStavke = (ArrayList<StavkaDB>) stavkaDAO.queryForAll();
+			ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
+			
+			String mtID = mt102.getIdPoruke();
+			
+			for(ServisNalogDB sndb: servisiNalozi)
+			{
+				if(sndb.getMtID().equals(mtID))
+				{
+					for(NalogZaPrenosDB nalzp : sviNaloziZaPrenos)
+					{
+						if(sndb.getNalogID().equals(nalzp.getIdPoruke()))
+						{
+							naloziZaUpdate.add(nalzp);
+						}
+					}
+				}
+			}
+			
+			for(NalogZaPrenosDB nzp: naloziZaUpdate)
+			{
+				nzp.setObradjeno(true);
+				nzpDAO.update(nzp);
+				
+				KlijentDB klPrimaoc =null;
+				
+				ArrayList<StavkaDB> stavkePrimaoca = new ArrayList<StavkaDB>();
+				double prethodnoStanjeZaPrimaoca=0;
+				
+				for(KlijentDB kl:sviKlijenti)
+	        	{
+	        		if(kl.getBrojRacuna().equals(nzp.getBrojRacunaPrimaoca()))
+	        		{
+	        			klPrimaoc=kl;
+	        			break;
+	        		}
+	        	}
+				
+				if(klPrimaoc!=null)
+				{
+					
+					for(StavkaDB st : sveStavke)
+	        		{
+	        			if(st.getKlijent().getBrojRacuna().equals(klPrimaoc.getBrojRacuna()))
+	        			{
+	        				stavkePrimaoca.add(st);
+	        			}
+	        		}
+					
+					if(stavkePrimaoca.size()!=0)
+	        		{
+	        			StavkaDB maxStavka=stavkePrimaoca.get(0);
+	        			
+	        			for(StavkaDB st: stavkePrimaoca)
+	        			{
+	        				if(st.getId()>maxStavka.getId())
+	        				{
+	        					maxStavka=st;
+	        				}
+	        			}
+	        			
+	        			prethodnoStanjeZaPrimaoca=maxStavka.getTrenutnoStanje();
+	        		}
+					
+					NalogZaPrenosDB nalogZaPrenos = nzp;
+					
+					double izn = nalogZaPrenos.getIznos();
+	        		
+	        		StavkaDB stavkaPrimaoca = new StavkaDB(nalogZaPrenos.getDuznik(),
+	        				nalogZaPrenos.getSvrhaPlacanja(),nalogZaPrenos.getPrimalac(),
+	        				nalogZaPrenos.getOznakaValute(),
+	        				nalogZaPrenos.getIznos(),
+	        				nalogZaPrenos.getBrojRacunaDuznika(),
+	        				nalogZaPrenos.getBrojModelaDuznika(),
+	        				nalogZaPrenos.getPozivNaBrojDuznika(),
+	        				nalogZaPrenos.getBrojRacunaPrimaoca(),
+	        				nalogZaPrenos.getBrojModelaPrimaoca(),
+	        				nalogZaPrenos.getPozivNaBrojPrimaoca(),
+	        				nalogZaPrenos.getDatumValute(),
+	        				nalogZaPrenos.getDatumNaloga(),
+	        				"+",prethodnoStanjeZaPrimaoca,prethodnoStanjeZaPrimaoca+izn,klPrimaoc);
+	        		
+	        		stavkaDAO.create(stavkaPrimaoca);
+					
+					
+				}
+				else
+				{
+					System.out.println("Nije moglo naci klijenta za mt 102");
+				}
+				
+			}
+        	
             rs.ac.uns.ftn.xmlws.Status _return = null;
             return _return;
         } catch (java.lang.Exception ex) {
@@ -458,7 +1025,7 @@ public class BankaImpl implements Banka {
             throw new RuntimeException(ex);
         }
     }
-
+    
     /* (non-Javadoc)
      * @see rs.ac.uns.ftn.banka.Banka#primiMT103(rs.ac.uns.ftn.mt103.MT103  mt103 )*
      */
@@ -466,6 +1033,123 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT103");
         System.out.println(mt103);
         try {
+        	
+        	JdbcConnectionSource connectionSource = null;
+        	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
+        	
+        	bankaDAO = DaoManager.createDao(connectionSource, BankaDB.class);
+			klijentDAO = DaoManager.createDao(connectionSource, KlijentDB.class);
+			stavkaDAO = DaoManager.createDao(connectionSource, StavkaDB.class);
+			nzpDAO = DaoManager.createDao(connectionSource, NalogZaPrenosDB.class);
+			snDAO = DaoManager.createDao(connectionSource, ServisNalogDB.class);
+			
+			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, KlijentDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, StavkaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, NalogZaPrenosDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, ServisNalogDB.class);
+			
+			
+			// DODATI PARE PRIMAOCU
+			
+			ArrayList<ServisNalogDB> servisiNalozi = (ArrayList<ServisNalogDB>) snDAO.queryForAll();
+			ArrayList<NalogZaPrenosDB> sviNaloziZaPrenos = (ArrayList<NalogZaPrenosDB>) nzpDAO.queryForAll();
+			ArrayList<NalogZaPrenosDB> naloziZaUpdate = new ArrayList<NalogZaPrenosDB>();
+			ArrayList<StavkaDB> sveStavke = (ArrayList<StavkaDB>) stavkaDAO.queryForAll();
+			ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
+			
+			String mtID = mt103.getIDPoruke();
+			
+			for(ServisNalogDB sndb: servisiNalozi)
+			{
+				if(sndb.getMtID().equals(mtID))
+				{
+					for(NalogZaPrenosDB nalzp : sviNaloziZaPrenos)
+					{
+						if(sndb.getNalogID().equals(nalzp.getIdPoruke()))
+						{
+							naloziZaUpdate.add(nalzp);
+						}
+					}
+				}
+			}
+			
+			for(NalogZaPrenosDB nzp: naloziZaUpdate)
+			{
+				nzp.setObradjeno(true);
+				nzpDAO.update(nzp);
+				
+				KlijentDB klPrimaoc =null;
+				
+				ArrayList<StavkaDB> stavkePrimaoca = new ArrayList<StavkaDB>();
+				double prethodnoStanjeZaPrimaoca=0;
+				
+				for(KlijentDB kl:sviKlijenti)
+	        	{
+	        		if(kl.getBrojRacuna().equals(nzp.getBrojRacunaPrimaoca()))
+	        		{
+	        			klPrimaoc=kl;
+	        			break;
+	        		}
+	        	}
+				
+				if(klPrimaoc!=null)
+				{
+					
+					for(StavkaDB st : sveStavke)
+	        		{
+	        			if(st.getKlijent().getBrojRacuna().equals(klPrimaoc.getBrojRacuna()))
+	        			{
+	        				stavkePrimaoca.add(st);
+	        			}
+	        		}
+					
+					if(stavkePrimaoca.size()!=0)
+	        		{
+	        			StavkaDB maxStavka=stavkePrimaoca.get(0);
+	        			
+	        			for(StavkaDB st: stavkePrimaoca)
+	        			{
+	        				if(st.getId()>maxStavka.getId())
+	        				{
+	        					maxStavka=st;
+	        				}
+	        			}
+	        			
+	        			prethodnoStanjeZaPrimaoca=maxStavka.getTrenutnoStanje();
+	        		}
+					
+					NalogZaPrenosDB nalogZaPrenos = nzp;
+					
+					double izn = nalogZaPrenos.getIznos();
+	        		
+	        		StavkaDB stavkaPrimaoca = new StavkaDB(nalogZaPrenos.getDuznik(),
+	        				nalogZaPrenos.getSvrhaPlacanja(),nalogZaPrenos.getPrimalac(),
+	        				nalogZaPrenos.getOznakaValute(),
+	        				nalogZaPrenos.getIznos(),
+	        				nalogZaPrenos.getBrojRacunaDuznika(),
+	        				nalogZaPrenos.getBrojModelaDuznika(),
+	        				nalogZaPrenos.getPozivNaBrojDuznika(),
+	        				nalogZaPrenos.getBrojRacunaPrimaoca(),
+	        				nalogZaPrenos.getBrojModelaPrimaoca(),
+	        				nalogZaPrenos.getPozivNaBrojPrimaoca(),
+	        				nalogZaPrenos.getDatumValute(),
+	        				nalogZaPrenos.getDatumNaloga(),
+	        				"+",prethodnoStanjeZaPrimaoca,prethodnoStanjeZaPrimaoca+izn,klPrimaoc);
+	        		
+	        		stavkaDAO.create(stavkaPrimaoca);
+					
+					
+				}
+				else
+				{
+					System.out.println("Nije moglo naci klijenta za mt 103");
+				}
+				
+			}
+			
+			
+        	
             rs.ac.uns.ftn.xmlws.Status _return = null;
             return _return;
         } catch (java.lang.Exception ex) {
