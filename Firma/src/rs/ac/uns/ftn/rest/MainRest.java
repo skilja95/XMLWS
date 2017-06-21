@@ -10,9 +10,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.FileRequestEntity;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
 
 import rs.ac.uns.ftn.faktura.Faktura;
 import rs.ac.uns.ftn.firma.Firma;
@@ -22,7 +28,7 @@ import utils.Pom;
 
 @Path("/main")
 public class MainRest {
-
+	public static int increment=0;
 	@POST
 	@Path("/loadFile/")
 	@Consumes({ MediaType.APPLICATION_XML })
@@ -109,6 +115,34 @@ public class MainRest {
 			System.out.println("\nPogodio load file rest controller");
 			System.out.println("\nBroj racuna je: " +faktura.getZaglavljeFakture().getBrojRacuna());
 			
+			JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.faktura");
+			Marshaller marshaller = context.createMarshaller();
+			File file = new File("C:\\Users\\skilj\\Documents\\GitHub\\XMLWS\\Firma\\xmlovi\\probaSave "+increment+".xml");
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			marshaller.marshal(faktura, System.out);
+			marshaller.marshal(faktura, file);
+			
+			increment++;
+			System.out.println("\n");
+	        System.out.println("Sent HTTP POST request to add customer");
+//	        String inputFile = ClassLoader.getSystemResource("add_customer.xml").getFile();
+//	        File input = new File(inputFile);
+	        PostMethod post = new PostMethod("http://localhost:8080/firma/second/getFile");
+	        post.addRequestHeader("Accept" , "text/xml");
+	        RequestEntity entity = new FileRequestEntity(file, "text/xml;");
+	        post.setRequestEntity(entity);
+	        HttpClient httpclient = new HttpClient();
+	        try {
+	            int result = httpclient.executeMethod(post);
+	            System.out.println("Response status code: " + result);
+	            System.out.println("Response body: ");
+	            System.out.println(post.getResponseBodyAsString());
+	        } finally {
+	        	/*
+	        	 * Oslobodi konekciju...
+	        	 */
+	            post.releaseConnection();
+	        }
 
 			return "OK";
 		} catch (Exception e) {

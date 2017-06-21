@@ -21,7 +21,7 @@ import rs.ac.uns.ftn.presek.Presek;
  * 
  */
 
-@javax.jws.WebService(serviceName = "FirmaService", portName = "FirmaPort", targetNamespace = "http://www.ftn.uns.ac.rs/firma", wsdlLocation = "file:/C:/Users/skilj/Desktop/Firma/WEB-INF/wsdl/Firma.wsdl", endpointInterface = "rs.ac.uns.ftn.firma.Firma")
+@javax.jws.WebService(serviceName = "FirmaService", portName = "FirmaPort", targetNamespace = "http://www.ftn.uns.ac.rs/firma", wsdlLocation = "file:/C:/Users/skilj/Documents/GitHub/XMLWS/Firma/WEB-INF/wsdl/Firma.wsdl", endpointInterface = "rs.ac.uns.ftn.firma.Firma")
 
 public class FirmaImpl implements Firma {
 
