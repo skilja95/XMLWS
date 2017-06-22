@@ -6,9 +6,12 @@
 
 package rs.ac.uns.ftn.firma;
 
+import java.io.File;
 import java.net.URL;
 import java.util.logging.Logger;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
@@ -26,7 +29,7 @@ import rs.ac.uns.ftn.presek.Presek;
 public class FirmaImpl implements Firma {
 
 	private static final Logger LOG = Logger.getLogger(FirmaImpl.class.getName());
-
+	public static int increment=0;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -37,7 +40,7 @@ public class FirmaImpl implements Firma {
 		LOG.info("Executing operation posaljiZahtevZaIzvod");
 		System.out.println(zahtevZaIzvod.getBrojRacuna());
 		/*
-		 * TODO 1: Dobijeni objekat Presek, prebaciti u XML i sacuvati ga
+		 * DONE 1: Dobijeni objekat Presek, prebaciti u XML i sacuvati ga
 		 * */
 		
 //		try {
@@ -51,6 +54,12 @@ public class FirmaImpl implements Firma {
 //
 //		Presek presek = (Presek) banka.primiZahtevZaIzvod(zahtevZaIzvod);
 //		System.out.println("\nPristigao je presek od banke. Prebacivanje u xml..");
+//		JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.presek");
+//		Marshaller marshaller = context.createMarshaller();
+//		File file = new File("C:\\Users\\skilj\\Documents\\GitHub\\XMLWS\\Firma\\xmlovi\\dobijeniXmlPresek "+increment+".xml");
+//		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+//		marshaller.marshal(presek, file);
+//		increment++;
 //
 //	} catch (java.lang.Exception ex) {
 //		ex.printStackTrace();
