@@ -37,14 +37,14 @@
         <wsdl:part name="mt103" element = "mt103:MT_103"/>
     </wsdl:message>
     <wsdl:message name="primiMT103Response">
-        <wsdl:part name="response" element="utils:status"></wsdl:part>
+        <wsdl:part name="mt900" element="mt90010:MT900"></wsdl:part>
     </wsdl:message>
     
     <wsdl:message name="primiMT102Request">
         <wsdl:part name="mt102" element = "mt102:mt102"/>
     </wsdl:message>
     <wsdl:message name="primiMT102Response">
-        <wsdl:part name="response" element="utils:status"></wsdl:part>
+        <wsdl:part name="mt900" element="mt90010:MT900"></wsdl:part>
     </wsdl:message>
     
     <wsdl:portType name="CentralnaBanka">
