@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -42,6 +43,9 @@ import rs.ac.uns.ftn.mt103.MT103;
 import rs.ac.uns.ftn.mt103.TRacun;
 import rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos;
 import rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos.PodaciOUplati;
+import rs.ac.uns.ftn.presek.Presek;
+import rs.ac.uns.ftn.presek.Presek.Stavka;
+import rs.ac.uns.ftn.presek.Presek.Zaglavlje;
 import rs.ac.uns.ftn.xmlws.Status;
 
 /**
@@ -160,6 +164,7 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiNalogZaPlacanje");
         //System.out.println(nalogZaPrenos);
         JdbcConnectionSource connectionSource = null;
+        rs.ac.uns.ftn.xmlws.Status _return = new Status();
         try {
         	//System.out.println("NZP: "+nalogZaPrenos.getDuznik());
         	//System.out.println("IZNOS: "+nalogZaPrenos.getPodaciOUplati().getIznos());
@@ -208,7 +213,7 @@ public class BankaImpl implements Banka {
         	else
         	{
         		System.out.println("JEDAN OD RACUNA ILI OBA NISU UOPSTE REGISTROVANI");
-        		rs.ac.uns.ftn.xmlws.Status _return = new Status();
+        		//rs.ac.uns.ftn.xmlws.Status _return = new Status();
                 _return.setStatusCode(404);
                 _return.setStatusText("RACUN/I NIJE/SU PRONADJEN/I");
                 return _return;
@@ -264,11 +269,13 @@ public class BankaImpl implements Banka {
         		
         		for(StavkaDB st : sveStavke)
         		{
-        			if(st.getKlijent().getBrojRacuna().equals(klDuznik.getBrojRacuna()))
+					KlijentDB stavkaKlijent = klijentDAO.queryForSameId(st.getKlijent());
+
+        			if(stavkaKlijent.getBrojRacuna().equals(klDuznik.getBrojRacuna()))
         			{
         				stavkeDuznika.add(st);
         			}
-        			if(st.getKlijent().getBrojRacuna().equals(klPrimaoc.getBrojRacuna()))
+        			if(stavkaKlijent.getBrojRacuna().equals(klPrimaoc.getBrojRacuna()))
         			{
         				stavkePrimaoca.add(st);
         			}
@@ -361,7 +368,7 @@ public class BankaImpl implements Banka {
         		}
         		
         		
-        		rs.ac.uns.ftn.xmlws.Status _return = new Status();
+        		//rs.ac.uns.ftn.xmlws.Status _return = new Status();
                 _return.setStatusCode(200);
                 _return.setStatusText("OK");
                 return _return;
@@ -421,14 +428,18 @@ public class BankaImpl implements Banka {
         	}
         	
         	
-            rs.ac.uns.ftn.xmlws.Status _return = new Status();
+            
             _return.setStatusCode(200);
             _return.setStatusText("OK");
             return _return;
         } catch (java.lang.Exception ex) {
             ex.printStackTrace();
+            _return.setStatusCode(400);
+            _return.setStatusText("Something BAD happened");
             throw new RuntimeException(ex);
         }
+        
+        
     }
 
     /* (non-Javadoc)
@@ -715,6 +726,7 @@ public class BankaImpl implements Banka {
     public rs.ac.uns.ftn.presek.Presek primiZahtevZaIzvod(rs.ac.uns.ftn.zahtevzaizvod.ZahtevZaIzvod zahtevZaIzvod) { 
         LOG.info("Executing operation primiZahtevZaIzvod");
         System.out.println(zahtevZaIzvod);
+        //Status _return = new Status();
         try {
         	
         	JdbcConnectionSource connectionSource = null;
@@ -731,9 +743,305 @@ public class BankaImpl implements Banka {
 			TableUtils.createTableIfNotExists(connectionSource, StavkaDB.class);
 			TableUtils.createTableIfNotExists(connectionSource, NalogZaPrenosDB.class);
 			TableUtils.createTableIfNotExists(connectionSource, ServisNalogDB.class);
+			
+			
+			//zahtevZaIzvod.getBrojRacuna();
+			if(zahtevZaIzvod.getBrojRacuna()!=null && zahtevZaIzvod.getDatum()!=null)
+			{
+				ArrayList<StavkaDB> sveStavke = (ArrayList<StavkaDB>) stavkaDAO.queryForAll();
+				ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
+				
+				KlijentDB klijent = null;
+				
+				for(KlijentDB k: sviKlijenti)
+				{
+					if(k.getBrojRacuna().equals(zahtevZaIzvod.getBrojRacuna()))
+					{
+						klijent=k;
+						break;
+					}
+				}
+				if(klijent!=null)
+				{
+					ArrayList<StavkaDB> sskztd = new ArrayList<StavkaDB>();
+					//ArrayList<StavkaDB> sortiranasskztd = new ArrayList<StavkaDB>();
+					
+					Presek presek = new Presek();
+					Zaglavlje zaglavlje = new Zaglavlje();
+					
+					presek.getStavka();
+					
+					String brRac = klijent.getBrojRacuna();
+					
+						GregorianCalendar c = new GregorianCalendar();
+				    	Calendar calendar = Calendar.getInstance();
+				    	Date dateNxx =  calendar.getTime();
+				    	c.setTime(dateNxx);
+				    	//c.setTime(new Date(117,5,7));
+				    	XMLGregorianCalendar dateNalog = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+				    XMLGregorianCalendar datumNaloga = dateNalog;
+				    BigInteger brojPresjeka = zahtevZaIzvod.getRedniBrojPreseka();
+				    double prethodnoStanje =0;
+				    double novoStanje=0;
+				    
+				    int brojPromjenaNaTeret=0;
+				    int brojPromjenaUKorist=0;
+				    
+				    double ukupnoNaTeret=0;
+				    double ukupnoUKorist=0;
+				    
+				    
+		        	Date datumx = zahtevZaIzvod.getDatum().toGregorianCalendar().getTime();
+
+					for(StavkaDB st: sveStavke)
+					{
+						KlijentDB stavkaKlijent = klijentDAO.queryForSameId(st.getKlijent());
+						if(stavkaKlijent.getBrojRacuna().equals(klijent.getBrojRacuna()))
+						{
+							if(st.getDatumNaloga().equals(datumx))
+							{
+								System.out.println("NASLO SA ISTIM KORISNIKOM I DATUMOM!");
+								sskztd.add(st);
+							}
+						}
+					}
+					
+					for(StavkaDB st: sskztd)
+					{
+						
+					}
+					sskztd.sort(new Comparator<StavkaDB>() {
+
+						@Override
+						public int compare(StavkaDB o1, StavkaDB o2) {
+							// TODO Auto-generated method stub
+							if(o1.getId()<o2.getId())
+							{
+								return -1;
+							}
+							if(o1.getId()==o2.getId())
+							{
+								return 0;
+							}
+							if(o1.getId() > o2.getId())
+							{
+								return 1;
+							}
+							return 0;
+						}
+					});
+					
+					int pres=(zahtevZaIzvod.getRedniBrojPreseka().intValue());
+					
+					if(pres>=1)
+					{
+						
+						
+						int gornja = pres*10;
+						int donja = gornja-10;
+						
+						if(sskztd.size()>donja)
+						{
+							
+							for(int i=0; i<donja; i++)
+							{
+								System.out.println("OBRISALO: ssid"+sskztd.get(0).getId());
+								sskztd.remove(0);
+							}
+							
+							ArrayList<StavkaDB> nova = sskztd;
+							
+							sskztd=new ArrayList<StavkaDB>();
+							
+							if(nova.size()>10)
+							{
+								for(int i=0; i<10; i++)
+								{
+									sskztd.add(nova.get(i));
+								}
+							}
+							else
+							{
+								for(int i=0; i<nova.size(); i++)
+								{
+									sskztd.add(nova.get(i));
+								}
+							}
+							
+							
+							sskztd.sort(new Comparator<StavkaDB>() {
+
+								@Override
+								public int compare(StavkaDB o1, StavkaDB o2) {
+									// TODO Auto-generated method stub
+									if(o1.getId()<o2.getId())
+									{
+										return -1;
+									}
+									if(o1.getId()==o2.getId())
+									{
+										return 0;
+									}
+									if(o1.getId() > o2.getId())
+									{
+										return 1;
+									}
+									return 0;
+								}
+							});
+							System.out.println("----nakon prvog brisanja------");
+							for(StavkaDB st: sskztd)
+							{
+								System.out.println("id: "+st.getId());
+							}
+							
+							/*
+							if(sskztd.size()>10)
+							{
+								sskztd.
+								for(int j=10; j<sskztd.size(); j++)
+								{
+									
+									
+									System.out.println("Obrisalo2: ssid "+sskztd.get(j).getId());
+									sskztd.remove(10);
+								}
+							}
+							*/
+							sskztd.sort(new Comparator<StavkaDB>() {
+
+								@Override
+								public int compare(StavkaDB o1, StavkaDB o2) {
+									// TODO Auto-generated method stub
+									if(o1.getId()<o2.getId())
+									{
+										return -1;
+									}
+									if(o1.getId()==o2.getId())
+									{
+										return 0;
+									}
+									if(o1.getId() > o2.getId())
+									{
+										return 1;
+									}
+									return 0;
+								}
+							});
+							
+							
+							System.out.println("-----nakon drugog brisanja------");
+							for(StavkaDB st: sskztd)
+							{
+								System.out.println("id: "+st.getId());
+							}
+							
+							prethodnoStanje=sskztd.get(0).getPrethodnoStanje();
+							
+							
+							for(StavkaDB st: sskztd)
+							{
+								if(st.getSmer().equals("+"))
+								{
+									brojPromjenaUKorist=brojPromjenaUKorist+1;
+									ukupnoUKorist=ukupnoUKorist+st.getIznos();
+								}
+								else
+								{
+									brojPromjenaNaTeret=brojPromjenaNaTeret+1;
+									ukupnoNaTeret=ukupnoNaTeret+st.getIznos();
+								}
+								
+								novoStanje=st.getTrenutnoStanje();
+								
+								Stavka stavka = new Stavka();
+								
+								//stavka.set
+									GregorianCalendar c1 = new GregorianCalendar();
+						        	c1.setTime(st.getDatumNaloga());
+						        	XMLGregorianCalendar datumNalogaSt = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+						        	GregorianCalendar c2 = new GregorianCalendar();
+						        	c2.setTime(st.getDatumValute());
+						        	XMLGregorianCalendar datumValuteSt = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+						        	
+						        stavka.setDatumNaloga(datumNalogaSt);
+						        stavka.setDatumValute(datumValuteSt);
+						        stavka.setDuznik(st.getDuznik());
+						        stavka.setIznos(BigDecimal.valueOf(st.getIznos()));
+						        stavka.setPoverilac(st.getPrimalac());
+						        	
+						        	rs.ac.uns.ftn.xmlws.TRacun trd = new rs.ac.uns.ftn.xmlws.TRacun();
+						        	trd.setBrojModela(BigInteger.valueOf(st.getBrojModelaDuznika()));
+						        	trd.setBrojRacuna(st.getBrojRacunaDuznika());
+						        	trd.setPozivNaBroj(st.getPozivNaBrojDuznika());
+						        	
+						        	rs.ac.uns.ftn.xmlws.TRacun trp = new rs.ac.uns.ftn.xmlws.TRacun();
+						        	
+						        	trp.setBrojModela(BigInteger.valueOf(st.getBrojModelaPrimaoca()));
+						        	trp.setBrojRacuna(st.getBrojRacunaPrimaoca());
+						        	trp.setPozivNaBroj(st.getPozivNaBrojPrimaoca());
+						        	
+						        stavka.setRacunDuznika(trd);
+						        stavka.setRacunPoverioca(trp);
+						        stavka.setSmer(st.getSmer());
+						        stavka.setSvrhaPlacanja(st.getSvrhaPlacanja());
+						        
+						        presek.getStavka().add(stavka);
+						        //stavka.set
+								
+							}
+							
+							zaglavlje.setBrojPreseka(zahtevZaIzvod.getRedniBrojPreseka());
+							zaglavlje.setBrojPromenaNaTeret(BigInteger.valueOf(brojPromjenaNaTeret));
+							zaglavlje.setBrojPromenaUKorist(BigInteger.valueOf(brojPromjenaUKorist));
+							zaglavlje.setBrojRacuna(zahtevZaIzvod.getBrojRacuna());
+							zaglavlje.setDatumNaloga(datumNaloga);
+							zaglavlje.setNovoStanje(BigDecimal.valueOf(novoStanje));
+							zaglavlje.setPrethodnoStanje(BigDecimal.valueOf(prethodnoStanje));
+							zaglavlje.setUkupnoNaTeret(BigDecimal.valueOf(ukupnoNaTeret));
+							zaglavlje.setUkupnoUKorist(BigDecimal.valueOf(ukupnoUKorist));
+							
+							presek.setZaglavlje(zaglavlje);
+							
+							return presek;
+							
+							//for()
+							
+							
+							
+						}
+						else
+						{
+							System.out.println("MANJI OD DONJA");
+							return null;
+						}
+						
+						
+					}
+					else
+					{
+						System.out.println("PRESJEK < 1");
+						return null;
+					}
+					
+				}
+				else
+				{
+					System.out.println("KLIJENT NULL!");
+					return null;
+				}
+			}
+			else
+			{
+				
+				System.out.println("NESTO FALI U OBJEKTU KOJI STIGNE!");
+				return null;
+			}
         	
-            rs.ac.uns.ftn.presek.Presek _return = null;
-            return _return;
+			
+			
+            //rs.ac.uns.ftn.presek.Presek _return = null;
+            //return _return;
         } catch (java.lang.Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
@@ -811,8 +1119,7 @@ public class BankaImpl implements Banka {
 			
 			for(NalogZaPrenosDB nzp: naloziZaUpdate)
 			{
-				nzp.setObradjeno(true);
-				nzpDAO.update(nzp);
+				
 				
 				KlijentDB klDuznik =null;
 				
@@ -833,7 +1140,16 @@ public class BankaImpl implements Banka {
 					
 					for(StavkaDB st : sveStavke)
 	        		{
-	        			if(st.getKlijent().getBrojRacuna().equals(klDuznik.getBrojRacuna()))
+						
+						//KlijentDB stavkaKlijent = (KlijentDB) klijentDAO.queryForMatching(st.getKlijent());
+						KlijentDB stavkaKlijent = klijentDAO.queryForSameId(st.getKlijent());
+						
+						if(klDuznik.getBrojRacuna()!=null)
+						{
+							System.out.println("Klijent duznik zna svoj racun");
+						}
+						
+	        			if(stavkaKlijent.getBrojRacuna().equals(klDuznik.getBrojRacuna()))
 	        			{
 	        				stavkeDuznika.add(st);
 	        			}
@@ -880,6 +1196,9 @@ public class BankaImpl implements Banka {
 				{
 					System.out.println("Nije moglo naci klijenta za mt 900");
 				}
+				
+				nzp.setObradjeno(true);
+				nzpDAO.update(nzp);
 				
 			}
 			
@@ -966,9 +1285,14 @@ public class BankaImpl implements Banka {
 				if(klPrimaoc!=null)
 				{
 					
+					
+					
 					for(StavkaDB st : sveStavke)
 	        		{
-	        			if(st.getKlijent().getBrojRacuna().equals(klPrimaoc.getBrojRacuna()))
+						KlijentDB stavkaKlijent = klijentDAO.queryForSameId(st.getKlijent());
+
+						
+	        			if(stavkaKlijent.getBrojRacuna().equals(klPrimaoc.getBrojRacuna()))
 	        			{
 	        				stavkePrimaoca.add(st);
 	        			}
@@ -1098,7 +1422,9 @@ public class BankaImpl implements Banka {
 					
 					for(StavkaDB st : sveStavke)
 	        		{
-	        			if(st.getKlijent().getBrojRacuna().equals(klPrimaoc.getBrojRacuna()))
+						KlijentDB stavkaKlijent = klijentDAO.queryForSameId(st.getKlijent());
+
+	        			if(stavkaKlijent.getBrojRacuna().equals(klPrimaoc.getBrojRacuna()))
 	        			{
 	        				stavkePrimaoca.add(st);
 	        			}

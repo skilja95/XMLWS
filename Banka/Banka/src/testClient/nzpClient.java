@@ -25,7 +25,7 @@ public class nzpClient {
 	public void testPrimiNalogZaPlacanje() {
 		try {
 			
-			System.out.println("T1 medjubankarski");
+			System.out.println("T1 medju");
 			
 			//URL wsdl = new URL("/home/igor/Documents/gitRepos/XMLWS/Banka/Banka/WEB-INF/wsdl/Banka.wsdl");
 			URL wsdl = new URL("http://localhost:8080/banka/services/Banka?wsdl");
@@ -37,8 +37,8 @@ public class nzpClient {
 	    	Banka banka = service.getPort(portName,Banka.class);
 	    	
 	    	NalogZaPrenos nzp = new NalogZaPrenos();
-	    	nzp.setDuznik("Citroen");
-	    	nzp.setIdPoruke("a1");
+	    	nzp.setDuznik("Reno");
+	    	nzp.setIdPoruke("k1");
 	    	PodaciOUplati pou = new PodaciOUplati();
 	    	GregorianCalendar c = new GregorianCalendar();
 	    	Calendar calendar = Calendar.getInstance();
@@ -49,21 +49,21 @@ public class nzpClient {
 	    	pou.setDatumNaloga(date2);
 	    	pou.setDatumValute(date2);
 	    	pou.setHitno(true);
-	    	pou.setIznos(BigDecimal.valueOf(800));
+	    	pou.setIznos(BigDecimal.valueOf(290000));
 	    	pou.setOznakaValute("RSD");
 	    	TRacun duznik = new TRacun();
 	    	duznik.setBrojModela(BigInteger.valueOf(10));
-	    	duznik.setBrojRacuna("000000000000000001");
+	    	duznik.setBrojRacuna("000000000000000002");
 	    	duznik.setPozivNaBroj("98");
 	    	pou.setRacunDuznika(duznik);
 	    	TRacun pov = new TRacun();
 	    	pov.setBrojModela(BigInteger.valueOf(11));
-	    	pov.setBrojRacuna("000000000000000002");
+	    	pov.setBrojRacuna("000000000000000001");
 	    	pov.setPozivNaBroj("98");
 	    	pou.setRacunPoverioca(pov);
 	    	nzp.setPodaciOUplati(pou);
-	    	nzp.setPrimalac("Reno");
-	    	nzp.setSvrhaPlacanja("pranje parica");
+	    	nzp.setPrimalac("Citroen");
+	    	nzp.setSvrhaPlacanja("1");
 	    	
 	    	
 	    	Status stat = banka.primiNalogZaPlacanje(nzp);
@@ -80,7 +80,7 @@ public class nzpClient {
 	
 	public void t2() {
 		try {
-			System.out.println("T2 RTGS");
+			System.out.println("T2 medju");
 			
 			//URL wsdl = new URL("/home/igor/Documents/gitRepos/XMLWS/Banka/Banka/WEB-INF/wsdl/Banka.wsdl");
 			URL wsdl = new URL("http://localhost:8080/banka/services/Banka?wsdl");
@@ -92,8 +92,8 @@ public class nzpClient {
 	    	Banka banka = service.getPort(portName,Banka.class);
 	    	
 	    	NalogZaPrenos nzp = new NalogZaPrenos();
-	    	nzp.setDuznik("Citroen");
-	    	nzp.setIdPoruke("a2");
+	    	nzp.setDuznik("Reno");
+	    	nzp.setIdPoruke("k2");
 	    	PodaciOUplati pou = new PodaciOUplati();
 	    	GregorianCalendar c = new GregorianCalendar();
 	    	Calendar calendar = Calendar.getInstance();
@@ -104,21 +104,21 @@ public class nzpClient {
 	    	pou.setDatumNaloga(date2);
 	    	pou.setDatumValute(date2);
 	    	pou.setHitno(true);
-	    	pou.setIznos(BigDecimal.valueOf(800));
+	    	pou.setIznos(BigDecimal.valueOf(290000));
 	    	pou.setOznakaValute("RSD");
 	    	TRacun duznik = new TRacun();
 	    	duznik.setBrojModela(BigInteger.valueOf(10));
-	    	duznik.setBrojRacuna("000000000000000001");
+	    	duznik.setBrojRacuna("000000000000000002");
 	    	duznik.setPozivNaBroj("98");
 	    	pou.setRacunDuznika(duznik);
 	    	TRacun pov = new TRacun();
 	    	pov.setBrojModela(BigInteger.valueOf(11));
-	    	pov.setBrojRacuna("000000000000000003");
+	    	pov.setBrojRacuna("000000000000000001");
 	    	pov.setPozivNaBroj("98");
 	    	pou.setRacunPoverioca(pov);
 	    	nzp.setPodaciOUplati(pou);
-	    	nzp.setPrimalac("VW");
-	    	nzp.setSvrhaPlacanja("T2 ");
+	    	nzp.setPrimalac("Citroen");
+	    	nzp.setSvrhaPlacanja("1");
 	    	
 	    	
 	    	Status stat = banka.primiNalogZaPlacanje(nzp);
@@ -135,7 +135,7 @@ public class nzpClient {
 	
 	public void t3() {
 		try {
-			System.out.println("T3 clearing");
+			System.out.println("T3 medju");
 			
 			//URL wsdl = new URL("/home/igor/Documents/gitRepos/XMLWS/Banka/Banka/WEB-INF/wsdl/Banka.wsdl");
 			URL wsdl = new URL("http://localhost:8080/banka/services/Banka?wsdl");
@@ -147,32 +147,33 @@ public class nzpClient {
 	    	Banka banka = service.getPort(portName,Banka.class);
 	    	
 	    	NalogZaPrenos nzp = new NalogZaPrenos();
-	    	nzp.setDuznik("Citroen");
-	    	nzp.setIdPoruke("a3");
+	    	nzp.setDuznik("Reno");
+	    	nzp.setIdPoruke("k3");
 	    	PodaciOUplati pou = new PodaciOUplati();
 	    	GregorianCalendar c = new GregorianCalendar();
 	    	Calendar calendar = Calendar.getInstance();
-            Date date =  calendar.getTime();
+	    	Date date =  calendar.getTime();
 	    	c.setTime(date);
+	    	//c.setTime(new Date(117,5,7));
 	    	XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 	    	pou.setDatumNaloga(date2);
 	    	pou.setDatumValute(date2);
-	    	pou.setHitno(false);
-	    	pou.setIznos(BigDecimal.valueOf(1500));
+	    	pou.setHitno(true);
+	    	pou.setIznos(BigDecimal.valueOf(290000));
 	    	pou.setOznakaValute("RSD");
 	    	TRacun duznik = new TRacun();
 	    	duznik.setBrojModela(BigInteger.valueOf(10));
-	    	duznik.setBrojRacuna("000000000000000001");
+	    	duznik.setBrojRacuna("000000000000000002");
 	    	duznik.setPozivNaBroj("98");
 	    	pou.setRacunDuznika(duznik);
 	    	TRacun pov = new TRacun();
 	    	pov.setBrojModela(BigInteger.valueOf(11));
-	    	pov.setBrojRacuna("000000000000000003");
+	    	pov.setBrojRacuna("000000000000000001");
 	    	pov.setPozivNaBroj("98");
 	    	pou.setRacunPoverioca(pov);
 	    	nzp.setPodaciOUplati(pou);
-	    	nzp.setPrimalac("VW");
-	    	nzp.setSvrhaPlacanja("Test 3");
+	    	nzp.setPrimalac("Citroen");
+	    	nzp.setSvrhaPlacanja("1");
 	    	
 	    	
 	    	Status stat = banka.primiNalogZaPlacanje(nzp);
@@ -189,7 +190,7 @@ public class nzpClient {
 	
 	public void t4() {
 		try {
-			System.out.println("T4 clearing 3-2 ");
+			System.out.println("T4 medju ");
 			
 			//URL wsdl = new URL("/home/igor/Documents/gitRepos/XMLWS/Banka/Banka/WEB-INF/wsdl/Banka.wsdl");
 			URL wsdl = new URL("http://localhost:8080/banka/services/Banka?wsdl");
@@ -201,22 +202,23 @@ public class nzpClient {
 	    	Banka banka = service.getPort(portName,Banka.class);
 	    	
 	    	NalogZaPrenos nzp = new NalogZaPrenos();
-	    	nzp.setDuznik("VW");
-	    	nzp.setIdPoruke("a4");
+	    	nzp.setDuznik("Citroen");
+	    	nzp.setIdPoruke("k4");
 	    	PodaciOUplati pou = new PodaciOUplati();
 	    	GregorianCalendar c = new GregorianCalendar();
 	    	Calendar calendar = Calendar.getInstance();
-            Date date =  calendar.getTime();
+	    	Date date =  calendar.getTime();
 	    	c.setTime(date);
+	    	//c.setTime(new Date(117,5,7));
 	    	XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 	    	pou.setDatumNaloga(date2);
 	    	pou.setDatumValute(date2);
-	    	pou.setHitno(false);
-	    	pou.setIznos(BigDecimal.valueOf(100));
+	    	pou.setHitno(true);
+	    	pou.setIznos(BigDecimal.valueOf(666777));
 	    	pou.setOznakaValute("RSD");
 	    	TRacun duznik = new TRacun();
 	    	duznik.setBrojModela(BigInteger.valueOf(10));
-	    	duznik.setBrojRacuna("000000000000000003");
+	    	duznik.setBrojRacuna("000000000000000001");
 	    	duznik.setPozivNaBroj("98");
 	    	pou.setRacunDuznika(duznik);
 	    	TRacun pov = new TRacun();
@@ -226,7 +228,7 @@ public class nzpClient {
 	    	pou.setRacunPoverioca(pov);
 	    	nzp.setPodaciOUplati(pou);
 	    	nzp.setPrimalac("Reno");
-	    	nzp.setSvrhaPlacanja("Test 4");
+	    	nzp.setSvrhaPlacanja("1");
 	    	
 	    	
 	    	Status stat = banka.primiNalogZaPlacanje(nzp);
@@ -243,7 +245,7 @@ public class nzpClient {
 	
 	public void t5() {
 		try {
-			System.out.println("T5 RTGS money");
+			System.out.println("T5 medju");
 			
 			//URL wsdl = new URL("/home/igor/Documents/gitRepos/XMLWS/Banka/Banka/WEB-INF/wsdl/Banka.wsdl");
 			URL wsdl = new URL("http://localhost:8080/banka/services/Banka?wsdl");
@@ -256,7 +258,7 @@ public class nzpClient {
 	    	
 	    	NalogZaPrenos nzp = new NalogZaPrenos();
 	    	nzp.setDuznik("Citroen");
-	    	nzp.setIdPoruke("a5");
+	    	nzp.setIdPoruke("k5");
 	    	PodaciOUplati pou = new PodaciOUplati();
 	    	GregorianCalendar c = new GregorianCalendar();
 	    	Calendar calendar = Calendar.getInstance();
@@ -266,8 +268,8 @@ public class nzpClient {
 	    	XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 	    	pou.setDatumNaloga(date2);
 	    	pou.setDatumValute(date2);
-	    	pou.setHitno(false);
-	    	pou.setIznos(BigDecimal.valueOf(35000));
+	    	pou.setHitno(true);
+	    	pou.setIznos(BigDecimal.valueOf(222111));
 	    	pou.setOznakaValute("RSD");
 	    	TRacun duznik = new TRacun();
 	    	duznik.setBrojModela(BigInteger.valueOf(10));
@@ -276,12 +278,12 @@ public class nzpClient {
 	    	pou.setRacunDuznika(duznik);
 	    	TRacun pov = new TRacun();
 	    	pov.setBrojModela(BigInteger.valueOf(11));
-	    	pov.setBrojRacuna("000000000000000003");
+	    	pov.setBrojRacuna("000000000000000002");
 	    	pov.setPozivNaBroj("98");
 	    	pou.setRacunPoverioca(pov);
 	    	nzp.setPodaciOUplati(pou);
-	    	nzp.setPrimalac("VW");
-	    	nzp.setSvrhaPlacanja("pranje parica");
+	    	nzp.setPrimalac("Reno");
+	    	nzp.setSvrhaPlacanja("1");
 	    	
 	    	
 	    	Status stat = banka.primiNalogZaPlacanje(nzp);
