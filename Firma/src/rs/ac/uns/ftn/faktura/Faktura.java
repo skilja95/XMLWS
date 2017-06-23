@@ -29,7 +29,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="id_poruke" type="{http://www.ftn.uns.ac.rs/xmlws}TIDPoruke"/>
+ *                   &lt;element name="id_poruke" type="{http://www.ftn.uns.ac.rs/faktura}TIDPoruke"/>
  *                   &lt;element name="broj_racuna">
  *                     &lt;simpleType>
  *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}positiveInteger">
@@ -39,22 +39,22 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *                     &lt;/simpleType>
  *                   &lt;/element>
  *                   &lt;element name="datum_racuna" type="{http://www.w3.org/2001/XMLSchema}date"/>
- *                   &lt;element name="vrednost_robe" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
- *                   &lt;element name="vrednost_usluga" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
- *                   &lt;element name="ukupno_roba_i_usluge" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
- *                   &lt;element name="ukupan_rabat" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
- *                   &lt;element name="ukupan_porez" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+ *                   &lt;element name="vrednost_robe" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
+ *                   &lt;element name="vrednost_usluga" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
+ *                   &lt;element name="ukupno_roba_i_usluge" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
+ *                   &lt;element name="ukupan_rabat" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
+ *                   &lt;element name="ukupan_porez" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
  *                   &lt;element name="oznaka_valute">
  *                     &lt;simpleType>
- *                       &lt;restriction base="{http://www.ftn.uns.ac.rs/xmlws}TOznaka_valute">
+ *                       &lt;restriction base="{http://www.ftn.uns.ac.rs/faktura}TOznaka_valute">
  *                         &lt;pattern value="[a-z]{3}|[A-Z]{3}"/>
  *                       &lt;/restriction>
  *                     &lt;/simpleType>
  *                   &lt;/element>
- *                   &lt;element name="iznos_za_uplatu" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+ *                   &lt;element name="iznos_za_uplatu" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
  *                   &lt;element name="uplata_na_racun">
  *                     &lt;simpleType>
- *                       &lt;restriction base="{http://www.ftn.uns.ac.rs/xmlws}TBrojRacuna">
+ *                       &lt;restriction base="{http://www.ftn.uns.ac.rs/faktura}TBrojRacuna">
  *                       &lt;/restriction>
  *                     &lt;/simpleType>
  *                   &lt;/element>
@@ -612,7 +612,7 @@ public class Faktura {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="id_poruke" type="{http://www.ftn.uns.ac.rs/xmlws}TIDPoruke"/>
+     *         &lt;element name="id_poruke" type="{http://www.ftn.uns.ac.rs/faktura}TIDPoruke"/>
      *         &lt;element name="broj_racuna">
      *           &lt;simpleType>
      *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}positiveInteger">
@@ -622,22 +622,22 @@ public class Faktura {
      *           &lt;/simpleType>
      *         &lt;/element>
      *         &lt;element name="datum_racuna" type="{http://www.w3.org/2001/XMLSchema}date"/>
-     *         &lt;element name="vrednost_robe" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
-     *         &lt;element name="vrednost_usluga" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
-     *         &lt;element name="ukupno_roba_i_usluge" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
-     *         &lt;element name="ukupan_rabat" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
-     *         &lt;element name="ukupan_porez" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+     *         &lt;element name="vrednost_robe" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
+     *         &lt;element name="vrednost_usluga" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
+     *         &lt;element name="ukupno_roba_i_usluge" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
+     *         &lt;element name="ukupan_rabat" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
+     *         &lt;element name="ukupan_porez" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
      *         &lt;element name="oznaka_valute">
      *           &lt;simpleType>
-     *             &lt;restriction base="{http://www.ftn.uns.ac.rs/xmlws}TOznaka_valute">
+     *             &lt;restriction base="{http://www.ftn.uns.ac.rs/faktura}TOznaka_valute">
      *               &lt;pattern value="[a-z]{3}|[A-Z]{3}"/>
      *             &lt;/restriction>
      *           &lt;/simpleType>
      *         &lt;/element>
-     *         &lt;element name="iznos_za_uplatu" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+     *         &lt;element name="iznos_za_uplatu" type="{http://www.ftn.uns.ac.rs/faktura}TIznos"/>
      *         &lt;element name="uplata_na_racun">
      *           &lt;simpleType>
-     *             &lt;restriction base="{http://www.ftn.uns.ac.rs/xmlws}TBrojRacuna">
+     *             &lt;restriction base="{http://www.ftn.uns.ac.rs/faktura}TBrojRacuna">
      *             &lt;/restriction>
      *           &lt;/simpleType>
      *         &lt;/element>

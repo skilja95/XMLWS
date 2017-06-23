@@ -53,4 +53,12 @@ public class ObjectFactory {
         return new Presek.Stavka();
     }
 
+    /**
+     * Create an instance of {@link TRacun }
+     * 
+     */
+    public TRacun createTRacun() {
+        return new TRacun();
+    }
+
 }

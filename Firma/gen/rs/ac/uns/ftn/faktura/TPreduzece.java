@@ -24,8 +24,8 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="adresa" type="{http://www.ftn.uns.ac.rs/xmlws}TAdresa"/>
- *         &lt;element name="pib" type="{http://www.ftn.uns.ac.rs/xmlws}TPIB"/>
+ *         &lt;element name="adresa" type="{http://www.ftn.uns.ac.rs/faktura}TAdresa"/>
+ *         &lt;element name="pib" type="{http://www.ftn.uns.ac.rs/faktura}TPIB"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

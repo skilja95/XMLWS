@@ -45,4 +45,12 @@ public class ObjectFactory {
         return new NalogZaPrenos.PodaciOUplati();
     }
 
+    /**
+     * Create an instance of {@link TRacun }
+     * 
+     */
+    public TRacun createTRacun() {
+        return new TRacun();
+    }
+
 }

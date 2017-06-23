@@ -21,7 +21,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="broj_racuna" type="{http://www.ftn.uns.ac.rs/xmlws}TBrojRacuna"/>
+ *         &lt;element name="broj_racuna" type="{http://www.ftn.uns.ac.rs/ZahtevZaIzvod}TBrojRacuna"/>
  *         &lt;element name="datum" type="{http://www.w3.org/2001/XMLSchema}date"/>
  *         &lt;element name="redni_broj_preseka">
  *           &lt;simpleType>

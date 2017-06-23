@@ -54,6 +54,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TRacun }
+     * 
+     */
+    public TRacun createTRacun() {
+        return new TRacun();
+    }
+
+    /**
      * Create an instance of {@link TPreduzece }
      * 
      */

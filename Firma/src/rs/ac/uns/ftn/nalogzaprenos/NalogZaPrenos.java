@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
-import rs.ac.uns.ftn.xmlws.TRacun;
 
 
 /**
@@ -22,7 +21,7 @@ import rs.ac.uns.ftn.xmlws.TRacun;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="id_poruke" type="{http://www.ftn.uns.ac.rs/xmlws}TIDPoruke"/>
+ *         &lt;element name="id_poruke" type="{http://www.ftn.uns.ac.rs/nalogZaPrenos}TIDPoruke"/>
  *         &lt;element name="duznik">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -49,10 +48,10 @@ import rs.ac.uns.ftn.xmlws.TRacun;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="oznaka_valute" type="{http://www.ftn.uns.ac.rs/xmlws}TOznaka_valute"/>
- *                   &lt;element name="iznos" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
- *                   &lt;element name="racun_duznika" type="{http://www.ftn.uns.ac.rs/xmlws}TRacun"/>
- *                   &lt;element name="racun_poverioca" type="{http://www.ftn.uns.ac.rs/xmlws}TRacun"/>
+ *                   &lt;element name="oznaka_valute" type="{http://www.ftn.uns.ac.rs/nalogZaPrenos}TOznaka_valute"/>
+ *                   &lt;element name="iznos" type="{http://www.ftn.uns.ac.rs/nalogZaPrenos}TIznos"/>
+ *                   &lt;element name="racun_duznika" type="{http://www.ftn.uns.ac.rs/nalogZaPrenos}TRacun"/>
+ *                   &lt;element name="racun_poverioca" type="{http://www.ftn.uns.ac.rs/nalogZaPrenos}TRacun"/>
  *                   &lt;element name="datum_valute" type="{http://www.w3.org/2001/XMLSchema}date"/>
  *                   &lt;element name="hitno" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *                   &lt;element name="datum_naloga" type="{http://www.w3.org/2001/XMLSchema}date"/>
@@ -222,10 +221,10 @@ public class NalogZaPrenos {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="oznaka_valute" type="{http://www.ftn.uns.ac.rs/xmlws}TOznaka_valute"/>
-     *         &lt;element name="iznos" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
-     *         &lt;element name="racun_duznika" type="{http://www.ftn.uns.ac.rs/xmlws}TRacun"/>
-     *         &lt;element name="racun_poverioca" type="{http://www.ftn.uns.ac.rs/xmlws}TRacun"/>
+     *         &lt;element name="oznaka_valute" type="{http://www.ftn.uns.ac.rs/nalogZaPrenos}TOznaka_valute"/>
+     *         &lt;element name="iznos" type="{http://www.ftn.uns.ac.rs/nalogZaPrenos}TIznos"/>
+     *         &lt;element name="racun_duznika" type="{http://www.ftn.uns.ac.rs/nalogZaPrenos}TRacun"/>
+     *         &lt;element name="racun_poverioca" type="{http://www.ftn.uns.ac.rs/nalogZaPrenos}TRacun"/>
      *         &lt;element name="datum_valute" type="{http://www.w3.org/2001/XMLSchema}date"/>
      *         &lt;element name="hitno" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
      *         &lt;element name="datum_naloga" type="{http://www.w3.org/2001/XMLSchema}date"/>

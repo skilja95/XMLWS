@@ -92,7 +92,7 @@
     
     <wsdl:service name="FirmaService">
         <wsdl:port name="FirmaPort" binding="ws:FirmaServiceBinding">
-            <soap:address location="http://localhost:8080/Firma"/>
+            <soap:address location="http://localhost:9001/Firma"/>
         </wsdl:port>
     </wsdl:service>
     

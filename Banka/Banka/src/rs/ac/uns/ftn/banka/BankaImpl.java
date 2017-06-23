@@ -8,6 +8,7 @@ package rs.ac.uns.ftn.banka;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -26,6 +27,8 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -38,6 +41,7 @@ import dbModels.NalogZaPrenosDB;
 import dbModels.ServisNalogDB;
 import dbModels.StavkaDB;
 import help.Trojka;
+import rs.ac.uns.ftn.centralnabanka.CentralnaBanka;
 import rs.ac.uns.ftn.mt102.Mt102;
 import rs.ac.uns.ftn.mt103.MT103;
 import rs.ac.uns.ftn.mt103.TRacun;
@@ -415,13 +419,21 @@ public class BankaImpl implements Banka {
         			//TODO: Poslati sad ovo na RTGS kao 103
         			
         			
-        			
+        			URL wsdl = new URL("http://localhost:9000/centralnaBanka/services/CentralnaBanka?wsdl");
+        	    	QName serviceName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaService");
+        	    	QName portName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaPort");
+        	    	
+        	    	Service service = Service.create(wsdl, serviceName);
+        	    	
+        	    	CentralnaBanka cb= service.getPort(portName,CentralnaBanka.class);
+        	    	
+        	    	cb.primiMT103(mt103);
         			
         			
         		}
         		else
         		{
-        			System.out.println(" CLEARING SERVIS CE DA OBAVI OVO! =================");
+        			
         			
         			//TODO: ... kontam ono nista ? to se radi u clearingu..
         		}
@@ -691,6 +703,18 @@ public class BankaImpl implements Banka {
 	        		mt102.setSwiftKodBankeDuznika(tro.getBankaDuznik().getSwift());
 	        		mt102.setSwiftKodBankePoverioca(tro.getBankaPrimaoc().getSwift());
 	        		mt102.setUkupanIznos(BigDecimal.valueOf(ukupnaSuma) );
+	        		
+	        		System.out.println(" CLEARING SERVIS CE DA OBAVI OVO! =================");
+        			
+        			URL wsdl = new URL("http://localhost:9000/centralnaBanka/services/CentralnaBanka?wsdl");
+        	    	QName serviceName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaService");
+        	    	QName portName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaPort");
+        	    	
+        	    	Service service = Service.create(wsdl, serviceName);
+        	    	
+        	    	CentralnaBanka cb= service.getPort(portName,CentralnaBanka.class);
+        	    	
+        	    	cb.primiMT102(mt102);
 	        		
 	        		
 	        		//TODO: POSLATI OVO NA KLIRING SERVIS .. sve vako jedno po jedno ko sto i radi
@@ -1054,6 +1078,7 @@ public class BankaImpl implements Banka {
     public rs.ac.uns.ftn.xmlws.Status primiMT910(rs.ac.uns.ftn.mt90010.TMT9 mt910) { 
         LOG.info("Executing operation primiMT910");
         System.out.println(mt910);
+        //mt910.get
         try {
         	
         	System.out.println("STIGLO ODOBRENJE");
@@ -1092,7 +1117,8 @@ public class BankaImpl implements Banka {
 			TableUtils.createTableIfNotExists(connectionSource, ServisNalogDB.class);
         	
         	
-			String mtID = mt900.getIDPoruke();
+			String mtID = mt900.getIDPorukeNaloga();//.getIDPoruke();
+			System.out.println("======= STIGO MT 900 ==============" +mtID);
 			
 			// ODBITI PARE DUZNIKU / DUZNICIMA
 			
@@ -1248,6 +1274,7 @@ public class BankaImpl implements Banka {
 			ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
 			
 			String mtID = mt102.getIdPoruke();
+			System.out.println("======= STIGO MT 102 ==============" +mtID);
 			
 			for(ServisNalogDB sndb: servisiNalozi)
 			{
@@ -1383,6 +1410,8 @@ public class BankaImpl implements Banka {
 			ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
 			
 			String mtID = mt103.getIDPoruke();
+			
+			System.out.println("======= STIGO MT 103 ==============" +mtID);
 			
 			for(ServisNalogDB sndb: servisiNalozi)
 			{

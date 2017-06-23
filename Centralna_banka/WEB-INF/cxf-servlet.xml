@@ -28,7 +28,7 @@
 	<jaxws:endpoint 
 		id="centralnaBanka" 
 		address="/CentralnaBanka"
-		implementor="rs.ac.uns.ftn.centralnaBanka.CentralnaBankaImpl"
+		implementor="rs.ac.uns.ftn.centralnabanka.CentralnaBankaImpl"
 		wsdlLocation="WEB-INF/wsdl/CentralnaBanka.wsdl"/>
 		
 

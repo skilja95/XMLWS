@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
-import rs.ac.uns.ftn.xmlws.TRacun;
 
 
 /**
@@ -30,7 +29,7 @@ import rs.ac.uns.ftn.xmlws.TRacun;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="broj_racuna" type="{http://www.ftn.uns.ac.rs/xmlws}TBrojRacuna"/>
+ *                   &lt;element name="broj_racuna" type="{http://www.ftn.uns.ac.rs/presek}TBrojRacuna"/>
  *                   &lt;element name="datum_naloga" type="{http://www.w3.org/2001/XMLSchema}date"/>
  *                   &lt;element name="broj_preseka" form="qualified">
  *                     &lt;simpleType>
@@ -39,7 +38,7 @@ import rs.ac.uns.ftn.xmlws.TRacun;
  *                       &lt;/restriction>
  *                     &lt;/simpleType>
  *                   &lt;/element>
- *                   &lt;element name="prethodno_stanje" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+ *                   &lt;element name="prethodno_stanje" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
  *                   &lt;element name="broj_promena_u_korist">
  *                     &lt;simpleType>
  *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}positiveInteger">
@@ -48,9 +47,9 @@ import rs.ac.uns.ftn.xmlws.TRacun;
  *                     &lt;/simpleType>
  *                   &lt;/element>
  *                   &lt;element name="broj_promena_na_teret" type="{http://www.w3.org/2001/XMLSchema}positiveInteger"/>
- *                   &lt;element name="ukupno_u_korist" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
- *                   &lt;element name="ukupno_na_teret" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
- *                   &lt;element name="novo_stanje" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+ *                   &lt;element name="ukupno_u_korist" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
+ *                   &lt;element name="ukupno_na_teret" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
+ *                   &lt;element name="novo_stanje" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -87,9 +86,9 @@ import rs.ac.uns.ftn.xmlws.TRacun;
  *                   &lt;/element>
  *                   &lt;element name="datum_naloga" type="{http://www.w3.org/2001/XMLSchema}date"/>
  *                   &lt;element name="datum_valute" type="{http://www.w3.org/2001/XMLSchema}date"/>
- *                   &lt;element name="racun_duznika" type="{http://www.ftn.uns.ac.rs/xmlws}TRacun"/>
- *                   &lt;element name="racun_poverioca" type="{http://www.ftn.uns.ac.rs/xmlws}TRacun"/>
- *                   &lt;element name="iznos" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+ *                   &lt;element name="racun_duznika" type="{http://www.ftn.uns.ac.rs/presek}TRacun"/>
+ *                   &lt;element name="racun_poverioca" type="{http://www.ftn.uns.ac.rs/presek}TRacun"/>
+ *                   &lt;element name="iznos" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
  *                   &lt;element name="smer">
  *                     &lt;simpleType>
  *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -212,9 +211,9 @@ public class Presek {
      *         &lt;/element>
      *         &lt;element name="datum_naloga" type="{http://www.w3.org/2001/XMLSchema}date"/>
      *         &lt;element name="datum_valute" type="{http://www.w3.org/2001/XMLSchema}date"/>
-     *         &lt;element name="racun_duznika" type="{http://www.ftn.uns.ac.rs/xmlws}TRacun"/>
-     *         &lt;element name="racun_poverioca" type="{http://www.ftn.uns.ac.rs/xmlws}TRacun"/>
-     *         &lt;element name="iznos" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+     *         &lt;element name="racun_duznika" type="{http://www.ftn.uns.ac.rs/presek}TRacun"/>
+     *         &lt;element name="racun_poverioca" type="{http://www.ftn.uns.ac.rs/presek}TRacun"/>
+     *         &lt;element name="iznos" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
      *         &lt;element name="smer">
      *           &lt;simpleType>
      *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -494,7 +493,7 @@ public class Presek {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="broj_racuna" type="{http://www.ftn.uns.ac.rs/xmlws}TBrojRacuna"/>
+     *         &lt;element name="broj_racuna" type="{http://www.ftn.uns.ac.rs/presek}TBrojRacuna"/>
      *         &lt;element name="datum_naloga" type="{http://www.w3.org/2001/XMLSchema}date"/>
      *         &lt;element name="broj_preseka" form="qualified">
      *           &lt;simpleType>
@@ -503,7 +502,7 @@ public class Presek {
      *             &lt;/restriction>
      *           &lt;/simpleType>
      *         &lt;/element>
-     *         &lt;element name="prethodno_stanje" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+     *         &lt;element name="prethodno_stanje" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
      *         &lt;element name="broj_promena_u_korist">
      *           &lt;simpleType>
      *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}positiveInteger">
@@ -512,9 +511,9 @@ public class Presek {
      *           &lt;/simpleType>
      *         &lt;/element>
      *         &lt;element name="broj_promena_na_teret" type="{http://www.w3.org/2001/XMLSchema}positiveInteger"/>
-     *         &lt;element name="ukupno_u_korist" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
-     *         &lt;element name="ukupno_na_teret" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
-     *         &lt;element name="novo_stanje" type="{http://www.ftn.uns.ac.rs/xmlws}TIznos"/>
+     *         &lt;element name="ukupno_u_korist" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
+     *         &lt;element name="ukupno_na_teret" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
+     *         &lt;element name="novo_stanje" type="{http://www.ftn.uns.ac.rs/presek}TIznos"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>

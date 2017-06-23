@@ -15,7 +15,7 @@ public class Firma_FirmaPort_Server{
     protected Firma_FirmaPort_Server() throws java.lang.Exception {
         System.out.println("Starting Server");
         Object implementor = new FirmaImpl();
-        String address = "http://localhost:8080/Firma";
+        String address = "http://localhost:9001/Firma";
         Endpoint.publish(address, implementor);
     }
     

@@ -47,12 +47,12 @@ public class MainRest {
 
 			// Unmarshalling generiše objektni model na osnovu XML fajla
 			NalogZaPrenos nalog = (NalogZaPrenos) unmarshaller
-					.unmarshal(new File("C:\\Users\\skilj\\Documents\\GitHub\\XMLWS\\Firma\\xmlovi\\" + nazivFajla + ".xml"));
+					.unmarshal(new File("/home/igor/Documents/gitRepos/XMLWS/Firma/xmlovi/" + nazivFajla + ".xml"));
 			System.out.println("\nXML fajl je uspjesno ucitan");
 			/*
 			 * Kreiranje konekcije ka servisu FIRME
 			 */
-			URL wsdl = new URL("http://localhost:8080/firma/services/Firma?wsdl");
+			URL wsdl = new URL("http://localhost:9001/firma/services/Firma?wsdl");
 			QName serviceName = new QName("http://www.ftn.uns.ac.rs/firma", "FirmaService");
 			QName portName = new QName("http://www.ftn.uns.ac.rs/firma", "FirmaPort");
 
@@ -86,12 +86,12 @@ public class MainRest {
 
 			// Unmarshalling generiše objektni model na osnovu XML fajla
 			ZahtevZaIzvod zahtev = (ZahtevZaIzvod) unmarshaller
-					.unmarshal(new File("C:\\Users\\skilj\\Documents\\GitHub\\XMLWS\\Firma\\xmlovi\\" + nazivFajla + ".xml"));
+					.unmarshal(new File("/home/igor/Documents/gitRepos/XMLWS/Firma/xmlovi/" + nazivFajla + ".xml"));
 			System.out.println("\nXML fajl je uspjesno ucitan");
 			/*
 			 * Kreiranje konekcije ka servisu FIRME
 			 */
-			URL wsdl = new URL("http://localhost:8080/firma/services/Firma?wsdl");
+			URL wsdl = new URL("http://localhost:9001/firma/services/Firma?wsdl");
 			QName serviceName = new QName("http://www.ftn.uns.ac.rs/firma", "FirmaService");
 			QName portName = new QName("http://www.ftn.uns.ac.rs/firma", "FirmaPort");
 
@@ -117,7 +117,7 @@ public class MainRest {
 			
 			JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.faktura");
 			Marshaller marshaller = context.createMarshaller();
-			File file = new File("C:\\Users\\skilj\\Documents\\GitHub\\XMLWS\\Firma\\xmlovi\\probaSave "+increment+".xml");
+			File file = new File("/home/igor/Documents/gitRepos/XMLWS/Firma/xmlovi/probaSave "+increment+".xml");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshaller.marshal(faktura, System.out);
 			marshaller.marshal(faktura, file);
@@ -127,7 +127,7 @@ public class MainRest {
 	        System.out.println("Sent HTTP POST request to add customer");
 //	        String inputFile = ClassLoader.getSystemResource("add_customer.xml").getFile();
 //	        File input = new File(inputFile);
-	        PostMethod post = new PostMethod("http://localhost:8080/firma/second/getFile");
+	        PostMethod post = new PostMethod("http://localhost:9001/firma/second/getFile");
 	        post.addRequestHeader("Accept" , "text/xml");
 	        RequestEntity entity = new FileRequestEntity(file, "text/xml;");
 	        post.setRequestEntity(entity);
