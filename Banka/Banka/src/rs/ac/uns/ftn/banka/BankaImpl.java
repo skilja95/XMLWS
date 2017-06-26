@@ -251,7 +251,7 @@ public class BankaImpl implements Banka {
         			nalogZaPrenos.getPodaciOUplati().isHitno(),
         			dtValute,
         			dtNaloga,
-        			false);
+        			false,false);
         	
         	nzpDAO.create(nzpdb);
         	
@@ -329,7 +329,7 @@ public class BankaImpl implements Banka {
         				nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getPozivNaBroj(),
         				dtValute,
         				dtNaloga,
-        				"-",prethodnoStanjeZaDuznika,prethodnoStanjeZaDuznika-izn,klDuznik);
+        				"T",prethodnoStanjeZaDuznika,prethodnoStanjeZaDuznika-izn,klDuznik);
         		
         		StavkaDB stavkaPrimaoca = new StavkaDB(nalogZaPrenos.getDuznik(),
         				nalogZaPrenos.getSvrhaPlacanja(),nalogZaPrenos.getPrimalac(),
@@ -343,7 +343,7 @@ public class BankaImpl implements Banka {
         				nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getPozivNaBroj(),
         				dtValute,
         				dtNaloga,
-        				"+",prethodnoStanjeZaPrimaoca,prethodnoStanjeZaPrimaoca+izn,klPrimaoc);
+        				"K",prethodnoStanjeZaPrimaoca,prethodnoStanjeZaPrimaoca+izn,klPrimaoc);
         		
         		stavkaDAO.create(stavkaDuznika);
         		stavkaDAO.create(stavkaPrimaoca);
@@ -363,7 +363,8 @@ public class BankaImpl implements Banka {
         		
         		if(nzpZaUpdate!=null)
         		{
-        			nzpZaUpdate.setObradjeno(true);
+        			nzpZaUpdate.setObradjenoDuznik(true);
+        			nzpZaUpdate.setObradjenoPrimaoc(true);
         			nzpDAO.update(nzpZaUpdate);
         		}
         		else
@@ -390,44 +391,57 @@ public class BankaImpl implements Banka {
         			
         			String mt103ID = generateRandomString();
         			
-        			mt103.setDatumNaloga(nalogZaPrenos.getPodaciOUplati().getDatumNaloga());
-        			mt103.setDatumValute(nalogZaPrenos.getPodaciOUplati().getDatumValute());
-        			mt103.setDuznikNalogodavac(nalogZaPrenos.getDuznik());
-        			mt103.setIDPoruke(mt103ID);
-        			mt103.setIznos(nalogZaPrenos.getPodaciOUplati().getIznos());
-        			mt103.setObracunskiRacunBankeDuznika(klDuznik.getBanka().getObracunskiRacun());
-        			mt103.setObracunskiRacunBankePoverioca(klPrimaoc.getBanka().getObracunskiRacun());
-        			mt103.setPrimalacPoverilac(nalogZaPrenos.getPrimalac());
-        				TRacun trDuz = new TRacun();
-        				trDuz.setBrojModela(nalogZaPrenos.getPodaciOUplati().getRacunDuznika().getBrojModela());
-        				trDuz.setBrojRacuna(nalogZaPrenos.getPodaciOUplati().getRacunDuznika().getBrojRacuna());
-        				trDuz.setPozivNaBroj(nalogZaPrenos.getPodaciOUplati().getRacunDuznika().getPozivNaBroj());
-        				TRacun trPov = new TRacun();
-        				trPov.setBrojModela(nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getBrojModela());
-        				trPov.setBrojRacuna(nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getBrojRacuna());
-        				trPov.setPozivNaBroj(nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getPozivNaBroj());
-        			mt103.setRacunDuznika(trDuz);
-        			mt103.setRacunPoverioca(trPov);
-        			mt103.setSifraValute(nalogZaPrenos.getPodaciOUplati().getOznakaValute());
-        			mt103.setSvrhaPlacanja(nalogZaPrenos.getSvrhaPlacanja());
-        			mt103.setSWIFTKodBankeDuznika(klDuznik.getBanka().getSwift());
-        			mt103.setSWIFTKodBankePoverioca(klPrimaoc.getBanka().getSwift());
+        			BankaDB duzBan = bankaDAO.queryForSameId(klDuznik.getBanka());
+        			BankaDB priBan = bankaDAO.queryForSameId(klPrimaoc.getBanka());
         			
-        			ServisNalogDB sndb = new ServisNalogDB(mt103ID,nalogZaPrenos.getIdPoruke());
-        			snDAO.create(sndb);
-        			
-        			//TODO: Poslati sad ovo na RTGS kao 103
-        			
-        			
-        			URL wsdl = new URL("http://localhost:9000/centralnaBanka/services/CentralnaBanka?wsdl");
-        	    	QName serviceName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaService");
-        	    	QName portName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaPort");
-        	    	
-        	    	Service service = Service.create(wsdl, serviceName);
-        	    	
-        	    	CentralnaBanka cb= service.getPort(portName,CentralnaBanka.class);
-        	    	
-        	    	cb.primiMT103(mt103);
+        			if(duzBan!=null && priBan!=null)
+        			{
+	        				
+	        			
+	        			
+	        			mt103.setDatumNaloga(nalogZaPrenos.getPodaciOUplati().getDatumNaloga());
+	        			mt103.setDatumValute(nalogZaPrenos.getPodaciOUplati().getDatumValute());
+	        			mt103.setDuznikNalogodavac(nalogZaPrenos.getDuznik());
+	        			mt103.setIDPoruke(mt103ID);
+	        			mt103.setIznos(nalogZaPrenos.getPodaciOUplati().getIznos());
+	        			mt103.setObracunskiRacunBankeDuznika(duzBan.getObracunskiRacun());
+	        			mt103.setObracunskiRacunBankePoverioca(priBan.getObracunskiRacun());
+	        			mt103.setPrimalacPoverilac(nalogZaPrenos.getPrimalac());
+	        				TRacun trDuz = new TRacun();
+	        				trDuz.setBrojModela(nalogZaPrenos.getPodaciOUplati().getRacunDuznika().getBrojModela());
+	        				trDuz.setBrojRacuna(nalogZaPrenos.getPodaciOUplati().getRacunDuznika().getBrojRacuna());
+	        				trDuz.setPozivNaBroj(nalogZaPrenos.getPodaciOUplati().getRacunDuznika().getPozivNaBroj());
+	        				TRacun trPov = new TRacun();
+	        				trPov.setBrojModela(nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getBrojModela());
+	        				trPov.setBrojRacuna(nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getBrojRacuna());
+	        				trPov.setPozivNaBroj(nalogZaPrenos.getPodaciOUplati().getRacunPoverioca().getPozivNaBroj());
+	        			mt103.setRacunDuznika(trDuz);
+	        			mt103.setRacunPoverioca(trPov);
+	        			mt103.setSifraValute(nalogZaPrenos.getPodaciOUplati().getOznakaValute());
+	        			mt103.setSvrhaPlacanja(nalogZaPrenos.getSvrhaPlacanja());
+	        			mt103.setSWIFTKodBankeDuznika(duzBan.getSwift());
+	        			mt103.setSWIFTKodBankePoverioca(priBan.getSwift());
+	        			
+	        			ServisNalogDB sndb = new ServisNalogDB(mt103ID,nalogZaPrenos.getIdPoruke());
+	        			snDAO.create(sndb);
+	        			
+	        			//TODO: Poslati sad ovo na RTGS kao 103
+	        			
+	        			
+	        			URL wsdl = new URL("http://localhost:9000/centralnaBanka/services/CentralnaBanka?wsdl");
+	        	    	QName serviceName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaService");
+	        	    	QName portName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaPort");
+	        	    	
+	        	    	Service service = Service.create(wsdl, serviceName);
+	        	    	
+	        	    	CentralnaBanka cb= service.getPort(portName,CentralnaBanka.class);
+	        	    	
+	        	    	cb.primiMT103(mt103);
+        			}
+        			else
+        			{
+        				System.out.println("IZ NEKOG RAZLOGA BANKE SU NULL .... EPIC FAIL");
+        			}
         			
         			
         		}
@@ -484,7 +498,7 @@ public class BankaImpl implements Banka {
 			
 			for(NalogZaPrenosDB nzpdb : sviNalozi)
 			{
-				if(nzpdb.isObradjeno()==false)
+				if(nzpdb.isObradjenoDuznik()==false)
 				{
 					sviNeObradjeniNalozi.add(nzpdb);
 				}
@@ -697,27 +711,40 @@ public class BankaImpl implements Banka {
 	        		mt102.setDatumValute(datex);
 	        		
 	        		
-	        		mt102.setObracunskiRacunBankeDuznika(tro.getBankaDuznik().getObracunskiRacun());
-	        		mt102.setObracunskiRacunBankePoverioca(tro.getBankaPrimaoc().getObracunskiRacun());
-	        		mt102.setSifraValute(valuta);
-	        		mt102.setSwiftKodBankeDuznika(tro.getBankaDuznik().getSwift());
-	        		mt102.setSwiftKodBankePoverioca(tro.getBankaPrimaoc().getSwift());
-	        		mt102.setUkupanIznos(BigDecimal.valueOf(ukupnaSuma) );
 	        		
-	        		System.out.println(" CLEARING SERVIS CE DA OBAVI OVO! =================");
+	        		BankaDB duzBan = bankaDAO.queryForSameId(tro.getBankaDuznik());
+        			BankaDB priBan = bankaDAO.queryForSameId(tro.getBankaPrimaoc());
+	        		
+        			if(duzBan!=null && priBan!=null)
+        			{
+        				
         			
-        			URL wsdl = new URL("http://localhost:9000/centralnaBanka/services/CentralnaBanka?wsdl");
-        	    	QName serviceName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaService");
-        	    	QName portName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaPort");
+		        		
+		        		mt102.setObracunskiRacunBankeDuznika(duzBan.getObracunskiRacun());
+		        		mt102.setObracunskiRacunBankePoverioca(priBan.getObracunskiRacun());
+		        		mt102.setSifraValute(valuta);
+		        		mt102.setSwiftKodBankeDuznika(duzBan.getSwift());
+		        		mt102.setSwiftKodBankePoverioca(priBan.getSwift());
+		        		mt102.setUkupanIznos(BigDecimal.valueOf(ukupnaSuma) );
+	        			
+	        			URL wsdl = new URL("http://localhost:9000/centralnaBanka/services/CentralnaBanka?wsdl");
+	        	    	QName serviceName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaService");
+	        	    	QName portName = new QName("http://www.ftn.uns.ac.rs/centralnaBanka", "CentralnaBankaPort");
+	        	    	
+	        	    	Service service = Service.create(wsdl, serviceName);
+	        	    	
+	        	    	CentralnaBanka cb= service.getPort(portName,CentralnaBanka.class);
+	        	    	
+	        	    	cb.primiMT102(mt102);
         	    	
-        	    	Service service = Service.create(wsdl, serviceName);
-        	    	
-        	    	CentralnaBanka cb= service.getPort(portName,CentralnaBanka.class);
-        	    	
-        	    	cb.primiMT102(mt102);
+        			}
+        			else
+        			{
+        				System.out.println("DuzBanka i priBanka su null ... u clearingu... epic fail");
+        			}
 	        		
 	        		
-	        		//TODO: POSLATI OVO NA KLIRING SERVIS .. sve vako jedno po jedno ko sto i radi
+	        		
 	        		
 
 	        	}
@@ -1081,7 +1108,128 @@ public class BankaImpl implements Banka {
         //mt910.get
         try {
         	
-        	System.out.println("STIGLO ODOBRENJE");
+        	System.out.println("STIGLO ODOBRENJE MT910, id poruke: "+mt910.getIDPoruke() + "id MT102/MT103 poruke: "+mt910.getIDPorukeNaloga());
+        	
+        	JdbcConnectionSource connectionSource = null;
+        	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
+        	
+        	bankaDAO = DaoManager.createDao(connectionSource, BankaDB.class);
+			klijentDAO = DaoManager.createDao(connectionSource, KlijentDB.class);
+			stavkaDAO = DaoManager.createDao(connectionSource, StavkaDB.class);
+			nzpDAO = DaoManager.createDao(connectionSource, NalogZaPrenosDB.class);
+			snDAO = DaoManager.createDao(connectionSource, ServisNalogDB.class);
+			
+			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, KlijentDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, StavkaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, NalogZaPrenosDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, ServisNalogDB.class);
+			
+			
+			// DODATI PARE PRIMAOCIMA
+			
+			ArrayList<ServisNalogDB> servisiNalozi = (ArrayList<ServisNalogDB>) snDAO.queryForAll();
+			ArrayList<NalogZaPrenosDB> sviNaloziZaPrenos = (ArrayList<NalogZaPrenosDB>) nzpDAO.queryForAll();
+			ArrayList<NalogZaPrenosDB> naloziZaUpdate = new ArrayList<NalogZaPrenosDB>();
+			ArrayList<StavkaDB> sveStavke = (ArrayList<StavkaDB>) stavkaDAO.queryForAll();
+			ArrayList<KlijentDB> sviKlijenti = (ArrayList<KlijentDB>) klijentDAO.queryForAll();
+			
+			String mtID = mt910.getIDPorukeNaloga();
+			
+			
+			
+			for(ServisNalogDB sndb: servisiNalozi)
+			{
+				if(sndb.getMtID().equals(mtID))
+				{
+					for(NalogZaPrenosDB nalzp : sviNaloziZaPrenos)
+					{
+						if(sndb.getNalogID().equals(nalzp.getIdPoruke()))
+						{
+							naloziZaUpdate.add(nalzp);
+						}
+					}
+				}
+			}
+			
+			for(NalogZaPrenosDB nzp: naloziZaUpdate)
+			{
+				
+				
+				KlijentDB klPrimaoc =null;
+				
+				ArrayList<StavkaDB> stavkePrimaoca = new ArrayList<StavkaDB>();
+				double prethodnoStanjeZaPrimaoca=0;
+				
+				for(KlijentDB kl:sviKlijenti)
+	        	{
+	        		if(kl.getBrojRacuna().equals(nzp.getBrojRacunaPrimaoca()))
+	        		{
+	        			klPrimaoc=kl;
+	        			break;
+	        		}
+	        	}
+				
+				if(klPrimaoc!=null)
+				{
+					
+					for(StavkaDB st : sveStavke)
+	        		{
+						KlijentDB stavkaKlijent = klijentDAO.queryForSameId(st.getKlijent());
+
+	        			if(stavkaKlijent!=null && stavkaKlijent.getBrojRacuna().equals(klPrimaoc.getBrojRacuna()))
+	        			{
+	        				stavkePrimaoca.add(st);
+	        			}
+	        		}
+					
+					if(stavkePrimaoca.size()!=0)
+	        		{
+	        			StavkaDB maxStavka=stavkePrimaoca.get(0);
+	        			
+	        			for(StavkaDB st: stavkePrimaoca)
+	        			{
+	        				if(st.getId()>maxStavka.getId())
+	        				{
+	        					maxStavka=st;
+	        				}
+	        			}
+	        			
+	        			prethodnoStanjeZaPrimaoca=maxStavka.getTrenutnoStanje();
+	        		}
+					
+					NalogZaPrenosDB nalogZaPrenos = nzp;
+					
+					double izn = nalogZaPrenos.getIznos();
+	        		
+	        		StavkaDB stavkaPrimaoca = new StavkaDB(nalogZaPrenos.getDuznik(),
+	        				nalogZaPrenos.getSvrhaPlacanja(),nalogZaPrenos.getPrimalac(),
+	        				nalogZaPrenos.getOznakaValute(),
+	        				nalogZaPrenos.getIznos(),
+	        				nalogZaPrenos.getBrojRacunaDuznika(),
+	        				nalogZaPrenos.getBrojModelaDuznika(),
+	        				nalogZaPrenos.getPozivNaBrojDuznika(),
+	        				nalogZaPrenos.getBrojRacunaPrimaoca(),
+	        				nalogZaPrenos.getBrojModelaPrimaoca(),
+	        				nalogZaPrenos.getPozivNaBrojPrimaoca(),
+	        				nalogZaPrenos.getDatumValute(),
+	        				nalogZaPrenos.getDatumNaloga(),
+	        				"K",prethodnoStanjeZaPrimaoca,prethodnoStanjeZaPrimaoca+izn,klPrimaoc);
+	        		
+	        		stavkaDAO.create(stavkaPrimaoca);
+					
+					
+				}
+				else
+				{
+					System.out.println("Nije moglo naci klijenta za mt 910");
+				}
+				
+				
+				nzp.setObradjenoPrimaoc(true);
+				nzpDAO.update(nzp);
+			}
+        	
         	
             rs.ac.uns.ftn.xmlws.Status _return = new Status();
             _return.setStatusCode(200);
@@ -1212,7 +1360,7 @@ public class BankaImpl implements Banka {
 	        				nalogZaPrenos.getPozivNaBrojPrimaoca(),
 	        				nalogZaPrenos.getDatumValute(),
 	        				nalogZaPrenos.getDatumNaloga(),
-	        				"-",prethodnoStanjeZaDuznika,prethodnoStanjeZaDuznika-izn,klDuznik);
+	        				"T",prethodnoStanjeZaDuznika,prethodnoStanjeZaDuznika-izn,klDuznik);
 	        		
 	        		stavkaDAO.create(stavkaDuznika);
 					
@@ -1223,7 +1371,7 @@ public class BankaImpl implements Banka {
 					System.out.println("Nije moglo naci klijenta za mt 900");
 				}
 				
-				nzp.setObradjeno(true);
+				nzp.setObradjenoDuznik(true);
 				nzpDAO.update(nzp);
 				
 			}
@@ -1233,7 +1381,9 @@ public class BankaImpl implements Banka {
 			
 			
 			
-            rs.ac.uns.ftn.xmlws.Status _return = null;
+            rs.ac.uns.ftn.xmlws.Status _return =new Status();
+            _return.setStatusCode(200);
+            _return.setStatusText("OK");
             return _return;
         } catch (java.lang.Exception ex) {
             ex.printStackTrace();
@@ -1248,7 +1398,8 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT102");
         System.out.println(mt102);
         try {
-        	
+        	System.out.println("PRIMLJEN MT 102, id poruke: "+mt102.getIdPoruke());
+        	/*
         	JdbcConnectionSource connectionSource = null;
         	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
         	
@@ -1368,8 +1519,10 @@ public class BankaImpl implements Banka {
 				}
 				
 			}
-        	
-            rs.ac.uns.ftn.xmlws.Status _return = null;
+        	*/
+            rs.ac.uns.ftn.xmlws.Status _return = new Status();
+            _return.setStatusCode(200);
+            _return.setStatusText("OK");
             return _return;
         } catch (java.lang.Exception ex) {
             ex.printStackTrace();
@@ -1385,6 +1538,9 @@ public class BankaImpl implements Banka {
         System.out.println(mt103);
         try {
         	
+        	System.out.println("Primljen MT103, id poruke: "+mt103.getIDPoruke());
+        	
+        	/*
         	JdbcConnectionSource connectionSource = null;
         	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
         	
@@ -1503,9 +1659,11 @@ public class BankaImpl implements Banka {
 				
 			}
 			
-			
+			*/
         	
-            rs.ac.uns.ftn.xmlws.Status _return = null;
+            rs.ac.uns.ftn.xmlws.Status _return = new Status();
+            _return.setStatusCode(200);
+            _return.setStatusText("OK");
             return _return;
         } catch (java.lang.Exception ex) {
             ex.printStackTrace();

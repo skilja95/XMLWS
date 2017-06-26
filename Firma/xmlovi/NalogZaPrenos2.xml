@@ -2,15 +2,15 @@
 <nalog_za_prenos xmlns="http://www.ftn.uns.ac.rs/nalogZaPrenos"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/nalogZaPrenos file:/C:/Users/skilj/Desktop/Firma/schemas/NalogZaPrenos.xsd">
-    <id_poruke>b3</id_poruke>
-    <duznik>M1</duznik>
-    <svrha_placanja>Clearing </svrha_placanja>
+    <id_poruke>a2</id_poruke>
+    <duznik>M2</duznik>
+    <svrha_placanja>Clearing</svrha_placanja>
     <primalac>M3</primalac>
     <podaci_o_uplati>
         <oznaka_valute>RSD</oznaka_valute>
-        <iznos>300</iznos>
+        <iznos>500</iznos>
         <racun_duznika>
-            <broj_racuna xmlns="http://www.ftn.uns.ac.rs/xmlws">000000000000000001</broj_racuna>
+            <broj_racuna xmlns="http://www.ftn.uns.ac.rs/xmlws">000000000000000002</broj_racuna>
             <broj_modela xmlns="http://www.ftn.uns.ac.rs/xmlws">18</broj_modela>
             <poziv_na_broj xmlns="http://www.ftn.uns.ac.rs/xmlws">189</poziv_na_broj>
         </racun_duznika>

@@ -50,6 +50,13 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
+		
+		
+		System.out.println("OVDE JE RIZICNO: --------------------------");
+		System.out.println("SWIFT D. Banke: "+mt102.getSwiftKodBankeDuznika());
+		System.out.println("SWIFT P. Banke: "+mt102.getSwiftKodBankePoverioca());
+		System.out.println("O.R. D. Banke: "+mt102.getObracunskiRacunBankeDuznika());
+		System.out.println("O.R. P. Banke: "+mt102.getObracunskiRacunBankePoverioca());
 
 		TMT9 mt900 = new TMT9();
 		mt900.setIDPoruke("mt900-" + dateFormat.format(date));
@@ -109,6 +116,12 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
+		
+		System.out.println("OVDE JE RIZICNO: --------------------------");
+		System.out.println("SWIFT D. Banke: "+mt103.getSWIFTKodBankeDuznika());
+		System.out.println("SWIFT P. Banke: "+mt103.getSWIFTKodBankePoverioca());
+		System.out.println("O.R. D. Banke: "+mt103.getObracunskiRacunBankeDuznika());
+		System.out.println("O.R. P. Banke: "+mt103.getObracunskiRacunBankePoverioca());
 
 		TMT9 mt900 = new TMT9();
 		mt900.setIDPoruke("mt900-" + dateFormat.format(date));

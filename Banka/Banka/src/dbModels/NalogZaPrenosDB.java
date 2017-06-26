@@ -28,7 +28,8 @@ public class NalogZaPrenosDB {
 	public static final String HITNO_FIELD_NAME="hitno";
 	public static final String DATUM_VALUTE_FIELD_NAME="datumValute";
 	public static final String DATUM_NALOGA_FIELD_NAME="datumNaloga";
-	public static final String OBRADJENO_FIELD_NAME="obradjeno";
+	public static final String OBRADJENO_DUZNIK_FIELD_NAME="obradjenoDuznik";
+	public static final String OBRADJENO_PRIMAOC_FIELD_NAME="obradjenoPrimaoc";
 	
 	
 	@DatabaseField(generatedId=true)
@@ -79,8 +80,11 @@ public class NalogZaPrenosDB {
 	@DatabaseField(columnName = DATUM_NALOGA_FIELD_NAME, canBeNull=false)
 	private Date datumNaloga;
 	
-	@DatabaseField(columnName = OBRADJENO_FIELD_NAME, canBeNull=false)
-	private boolean obradjeno;
+	@DatabaseField(columnName = OBRADJENO_DUZNIK_FIELD_NAME, canBeNull=false)
+	private boolean obradjenoDuznik;
+	
+	@DatabaseField(columnName = OBRADJENO_PRIMAOC_FIELD_NAME, canBeNull=false)
+	private boolean obradjenoPrimaoc;
 
 	public int getId() {
 		return id;
@@ -174,11 +178,7 @@ public class NalogZaPrenosDB {
 	public void setHitno(boolean hitno) {
 		this.hitno = hitno;
 	}
-
 	
-
-	
-
 	
 
 
@@ -186,7 +186,7 @@ public class NalogZaPrenosDB {
 	public NalogZaPrenosDB(String idPoruke, String duznik, String svrhaPlacanja, String primalac, String oznakaValute,
 			double iznos, String brojRacunaDuznika, int brojModelaDuznika, String pozivNaBrojDuznika,
 			String brojRacunaPrimaoca, int brojModelaPrimaoca, String pozivNaBrojPrimaoca, boolean hitno,
-			Date datumValute, Date datumNaloga, boolean obradjeno) {
+			Date datumValute, Date datumNaloga, boolean obradjenoDuznik, boolean obradjenoPrimaoc) {
 		super();
 		this.idPoruke = idPoruke;
 		this.duznik = duznik;
@@ -203,7 +203,24 @@ public class NalogZaPrenosDB {
 		this.hitno = hitno;
 		this.datumValute = datumValute;
 		this.datumNaloga = datumNaloga;
-		this.obradjeno = obradjeno;
+		this.obradjenoDuznik = obradjenoDuznik;
+		this.obradjenoPrimaoc = obradjenoPrimaoc;
+	}
+
+	public boolean isObradjenoDuznik() {
+		return obradjenoDuznik;
+	}
+
+	public void setObradjenoDuznik(boolean obradjenoDuznik) {
+		this.obradjenoDuznik = obradjenoDuznik;
+	}
+
+	public boolean isObradjenoPrimaoc() {
+		return obradjenoPrimaoc;
+	}
+
+	public void setObradjenoPrimaoc(boolean obradjenoPrimaoc) {
+		this.obradjenoPrimaoc = obradjenoPrimaoc;
 	}
 
 	public double getIznos() {
@@ -246,13 +263,7 @@ public class NalogZaPrenosDB {
 		this.datumNaloga = datumNaloga;
 	}
 
-	public boolean isObradjeno() {
-		return obradjeno;
-	}
 
-	public void setObradjeno(boolean obradjeno) {
-		this.obradjeno = obradjeno;
-	}
 
 	public NalogZaPrenosDB() {
 	}
