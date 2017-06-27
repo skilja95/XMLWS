@@ -6,6 +6,7 @@
 
 package rs.ac.uns.ftn.banka;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -24,6 +25,8 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -170,6 +173,24 @@ public class BankaImpl implements Banka {
         JdbcConnectionSource connectionSource = null;
         rs.ac.uns.ftn.xmlws.Status _return = new Status();
         try {
+        	
+        	
+        	try{
+	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.nalogzaprenos");
+	    		Marshaller marshaller = context.createMarshaller();
+	    		File file = new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/dobijeniXmlNZP "+nalogZaPrenos.getIdPoruke()+".xml");
+	    		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+	    		marshaller.marshal(nalogZaPrenos, file);
+        	}
+        	catch(Exception e)
+        	{
+        		System.out.println("Nalog nije pravilno formatiran!");
+        		Status s = new Status();
+        		s.setStatusCode(400);
+        		s.setStatusText("FAILED");
+        		return s;
+        	}
+        	
         	//System.out.println("NZP: "+nalogZaPrenos.getDuznik());
         	//System.out.println("IZNOS: "+nalogZaPrenos.getPodaciOUplati().getIznos());
         	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
@@ -476,6 +497,11 @@ public class BankaImpl implements Banka {
         
         
         try{
+        	
+        	
+        	
+        	
+        	
         	JdbcConnectionSource connectionSource = null;
         	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
         	
@@ -779,6 +805,24 @@ public class BankaImpl implements Banka {
         System.out.println(zahtevZaIzvod);
         //Status _return = new Status();
         try {
+        	
+        	try{
+	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.zahtevzaizvod");
+	    		Marshaller marshaller = context.createMarshaller();
+	    		File file = new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/dobijeniXmlZZI "+zahtevZaIzvod.getBrojRacuna()+".xml");
+	    		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+	    		marshaller.marshal(zahtevZaIzvod, file);
+        	}
+        	catch(Exception e)
+        	{
+        		System.out.println("ZZI nije pravilno formatiran!");
+        		return null;
+        		// s = new Status();
+        		//s.setStatusCode(400);
+        		//s.setStatusText("FAILED");
+        		//return s;
+        	}
+        	
         	
         	JdbcConnectionSource connectionSource = null;
         	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
@@ -1108,6 +1152,23 @@ public class BankaImpl implements Banka {
         //mt910.get
         try {
         	
+        	try{
+	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.mt90010");
+	    		Marshaller marshaller = context.createMarshaller();
+	    		File file = new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/dobijeniXmlMT910_ "+mt910.getIDPoruke()+".xml");
+	    		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+	    		marshaller.marshal(mt910, file);
+        	}
+        	catch(Exception e)
+        	{
+        		System.out.println("MT910 nije pravilno formatiran!");
+        		Status s = new Status();
+        		s.setStatusCode(400);
+        		s.setStatusText("FAILED");
+        		return s;
+        	}
+        	
+        	
         	System.out.println("STIGLO ODOBRENJE MT910, id poruke: "+mt910.getIDPoruke() + "id MT102/MT103 poruke: "+mt910.getIDPorukeNaloga());
         	
         	JdbcConnectionSource connectionSource = null;
@@ -1248,6 +1309,22 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT900");
         System.out.println(mt900);
         try {
+        	
+        	try{
+	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.mt90010");
+	    		Marshaller marshaller = context.createMarshaller();
+	    		File file = new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/dobijeniXmlMT900_ "+mt900.getIDPoruke()+".xml");
+	    		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+	    		marshaller.marshal(mt900, file);
+        	}
+        	catch(Exception e)
+        	{
+        		System.out.println("MT900 nije pravilno formatiran!");
+        		Status s = new Status();
+        		s.setStatusCode(400);
+        		s.setStatusText("FAILED");
+        		return s;
+        	}
         	
         	JdbcConnectionSource connectionSource = null;
         	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
@@ -1398,6 +1475,24 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT102");
         System.out.println(mt102);
         try {
+        	
+        	try{
+	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.mt102");
+	    		Marshaller marshaller = context.createMarshaller();
+	    		File file = new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/dobijeniXmlMT102_ "+mt102.getIdPoruke()+".xml");
+	    		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+	    		marshaller.marshal(mt102, file);
+        	}
+        	catch(Exception e)
+        	{
+        		System.out.println("MT102 nije pravilno formatiran!");
+        		Status s = new Status();
+        		s.setStatusCode(400);
+        		s.setStatusText("FAILED");
+        		return s;
+        	}
+        	
+        	
         	System.out.println("PRIMLJEN MT 102, id poruke: "+mt102.getIdPoruke());
         	/*
         	JdbcConnectionSource connectionSource = null;
@@ -1537,6 +1632,23 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT103");
         System.out.println(mt103);
         try {
+        	
+        	try{
+	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.mt103");
+	    		Marshaller marshaller = context.createMarshaller();
+	    		File file = new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/dobijeniXmlMT103_ "+mt103.getIDPoruke()+".xml");
+	    		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+	    		marshaller.marshal(mt103, file);
+        	}
+        	catch(Exception e)
+        	{
+        		System.out.println("MT103 nije pravilno formatiran!");
+        		Status s = new Status();
+        		s.setStatusCode(400);
+        		s.setStatusText("FAILED");
+        		return s;
+        	}
+        	
         	
         	System.out.println("Primljen MT103, id poruke: "+mt103.getIDPoruke());
         	

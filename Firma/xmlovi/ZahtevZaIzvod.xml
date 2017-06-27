@@ -2,7 +2,7 @@
 <zahtev_za_izvod xmlns="http://www.ftn.uns.ac.rs/ZahtevZaIzvod"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/ZahtevZaIzvod file:/C:/Users/skilj/Desktop/Firma/schemas/ZahtevZaIzvod.xsd">
-    <broj_racuna>000000000000000004</broj_racuna>
+    <broj_racuna>000-0000000000000-04</broj_racuna>
     <datum>2017-06-27</datum>
     <redni_broj_preseka>1</redni_broj_preseka>
 </zahtev_za_izvod>

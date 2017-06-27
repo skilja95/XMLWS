@@ -50,13 +50,24 @@ public class MainRest {
 
 			// Unmarshaller je objekat zadužen za konverziju iz XML-a u
 			// objektni model
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			unmarshaller.setSchema(schemaFactory.newSchema(new File(SCHEME_PATH_NALOGZAPRENOS)));
-			// Unmarshalling generiše objektni model na osnovu XML fajla
-			NalogZaPrenos nalog = (NalogZaPrenos) unmarshaller
-					.unmarshal(new File(PUTANJA_DO_FOLDERA + nazivFajla + ".xml"));
-
+			
+			NalogZaPrenos nalog=null;
+			try
+			{
+				Unmarshaller unmarshaller = context.createUnmarshaller();
+				SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				unmarshaller.setSchema(schemaFactory.newSchema(new File(SCHEME_PATH_NALOGZAPRENOS)));
+				// Unmarshalling generiše objektni model na osnovu XML fajla
+				 nalog = (NalogZaPrenos) unmarshaller
+						.unmarshal(new File(PUTANJA_DO_FOLDERA + nazivFajla + ".xml"));
+				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("EPIC FAIL ================================");
+				return "ERROR";
+			}
 			System.out.println("\nXML fajl je uspjesno ucitan");
 			/*
 			 * Kreiranje konekcije ka servisu FIRME
