@@ -6,8 +6,10 @@
 
 package rs.ac.uns.ftn.centralnabanka;
 
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +23,12 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.table.TableUtils;
+
+import dbModels.BankaDB;
 import rs.ac.uns.ftn.banka.Banka;
 import rs.ac.uns.ftn.mt90010.TMT9;
 
@@ -36,6 +44,9 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
 	private static final Logger LOG = Logger.getLogger(CentralnaBankaImpl.class.getName());
 
+	private final static String DATABASE_URL = "jdbc:mysql://localhost:3306/xmlcbanka";
+	private Dao<BankaDB, Integer> bankaDAO;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -48,16 +59,48 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		System.out.println(mt102);
 		System.out.println("primiMT102: " + mt102.getIdPoruke());
 
+		JdbcConnectionSource connectionSource = null;
+		try {
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "root", "cuko");
+			bankaDAO = DaoManager.createDao(connectionSource, BankaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// promena stanja
+		int iznos = mt102.getUkupanIznos().intValue();
+		BankaDB bankaDuznika = new BankaDB(mt102.getSwiftKodBankeDuznika(), mt102.getObracunskiRacunBankeDuznika());
+		BankaDB bankaPoverioca = new BankaDB(mt102.getSwiftKodBankePoverioca(),
+				mt102.getObracunskiRacunBankePoverioca());
+
+		bankaDuznika.setStanje(bankaDuznika.getStanje() - iznos);
+		try {
+			bankaDAO.update(bankaDuznika);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		bankaPoverioca.setStanje(bankaPoverioca.getStanje() + iznos);
+		try {
+			bankaDAO.update(bankaPoverioca);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
-		
-		
-		System.out.println("OVDE JE RIZICNO: --------------------------");
-		System.out.println("SWIFT D. Banke: "+mt102.getSwiftKodBankeDuznika());
-		System.out.println("SWIFT P. Banke: "+mt102.getSwiftKodBankePoverioca());
-		System.out.println("O.R. D. Banke: "+mt102.getObracunskiRacunBankeDuznika());
-		System.out.println("O.R. P. Banke: "+mt102.getObracunskiRacunBankePoverioca());
 
+		System.out.println("OVDE JE RIZICNO: --------------------------");
+		System.out.println("SWIFT D. Banke: " + mt102.getSwiftKodBankeDuznika());
+		System.out.println("SWIFT P. Banke: " + mt102.getSwiftKodBankePoverioca());
+		System.out.println("O.R. D. Banke: " + mt102.getObracunskiRacunBankeDuznika());
+		System.out.println("O.R. P. Banke: " + mt102.getObracunskiRacunBankePoverioca());
+
+		// generisanje mt900
 		TMT9 mt900 = new TMT9();
 		mt900.setIDPoruke("mt900-" + dateFormat.format(date));
 		mt900.setSWIFTKodBankeDuznika(mt102.getSwiftKodBankeDuznika());
@@ -67,6 +110,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		mt900.setIznos(mt102.getUkupanIznos());
 		mt900.setSifraValute(mt102.getSifraValute());
 
+		// generisanje mt910
 		TMT9 mt910 = new TMT9();
 		mt910.setIDPoruke("mt910-" + dateFormat.format(date));
 		mt910.setSWIFTKodBankeDuznika(mt102.getSwiftKodBankePoverioca());
@@ -114,15 +158,48 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		System.out.println(mt103);
 		System.out.println("primiMT103: " + mt103.getIDPoruke());
 
+		JdbcConnectionSource connectionSource = null;
+		try {
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "root", "cuko");
+			bankaDAO = DaoManager.createDao(connectionSource, BankaDB.class);
+			TableUtils.createTableIfNotExists(connectionSource, BankaDB.class);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
-		
-		System.out.println("OVDE JE RIZICNO: --------------------------");
-		System.out.println("SWIFT D. Banke: "+mt103.getSWIFTKodBankeDuznika());
-		System.out.println("SWIFT P. Banke: "+mt103.getSWIFTKodBankePoverioca());
-		System.out.println("O.R. D. Banke: "+mt103.getObracunskiRacunBankeDuznika());
-		System.out.println("O.R. P. Banke: "+mt103.getObracunskiRacunBankePoverioca());
 
+		// promena stanja
+		int iznos = mt103.getIznos().intValue();
+		BankaDB bankaDuznika = new BankaDB(mt103.getSWIFTKodBankeDuznika(), mt103.getObracunskiRacunBankeDuznika());
+		BankaDB bankaPoverioca = new BankaDB(mt103.getSWIFTKodBankePoverioca(),
+				mt103.getObracunskiRacunBankePoverioca());
+
+		bankaDuznika.setStanje(bankaDuznika.getStanje() - iznos);
+		try {
+			bankaDAO.update(bankaDuznika);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		bankaPoverioca.setStanje(bankaPoverioca.getStanje() + iznos);
+		try {
+			bankaDAO.update(bankaPoverioca);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		System.out.println("OVDE JE RIZICNO: --------------------------");
+		System.out.println("SWIFT D. Banke: " + mt103.getSWIFTKodBankeDuznika());
+		System.out.println("SWIFT P. Banke: " + mt103.getSWIFTKodBankePoverioca());
+		System.out.println("O.R. D. Banke: " + mt103.getObracunskiRacunBankeDuznika());
+		System.out.println("O.R. P. Banke: " + mt103.getObracunskiRacunBankePoverioca());
+
+		// generisanje mt900
 		TMT9 mt900 = new TMT9();
 		mt900.setIDPoruke("mt900-" + dateFormat.format(date));
 		mt900.setSWIFTKodBankeDuznika(mt103.getSWIFTKodBankeDuznika());
@@ -132,6 +209,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		mt900.setIznos(mt103.getIznos());
 		mt900.setSifraValute(mt103.getSifraValute());
 
+		// generisanje mt910
 		TMT9 mt910 = new TMT9();
 		mt910.setIDPoruke("mt910-" + dateFormat.format(date));
 		mt910.setSWIFTKodBankeDuznika(mt103.getSWIFTKodBankePoverioca());
