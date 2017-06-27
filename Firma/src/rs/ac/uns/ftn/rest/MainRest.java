@@ -32,8 +32,8 @@ import utils.Pom;
 public class MainRest {
 	public static int increment=0;
 	public static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
-	public static final String SCHEME_PATH_NALOGZAPRENOS = "WEB-INF/wsdl/NalogZaPrenos.xsd";
-	public static final String SCHEME_PATH_ZAHTEVZAIZVOD = "WEB-INF/wsdl/ZahtevZaIzvod.xsd";
+	public static final String SCHEME_PATH_NALOGZAPRENOS = "/home/igor/Documents/apachi/apach_firma/webapps/firma/WEB-INF/wsdl/NalogZaPrenos.xsd";
+	public static final String SCHEME_PATH_ZAHTEVZAIZVOD = "/home/igor/Documents/apachi/apach_firma/webapps/firma/WEB-INF/wsdl/ZahtevZaIzvod.xsd";
 	public static final String PUTANJA_DO_FOLDERA = "/home/igor/Documents/gitRepos/XMLWS/Firma/xmlovi/";
 	
 	@POST

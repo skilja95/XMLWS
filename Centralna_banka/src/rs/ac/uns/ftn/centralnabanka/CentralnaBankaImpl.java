@@ -12,6 +12,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
 import javax.jws.WebMethod;
@@ -71,24 +72,65 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
 		// promena stanja
 		int iznos = mt102.getUkupanIznos().intValue();
-		BankaDB bankaDuznika = new BankaDB(mt102.getSwiftKodBankeDuznika(), mt102.getObracunskiRacunBankeDuznika());
-		BankaDB bankaPoverioca = new BankaDB(mt102.getSwiftKodBankePoverioca(),
-				mt102.getObracunskiRacunBankePoverioca());
-
-		bankaDuznika.setStanje(bankaDuznika.getStanje() - iznos);
+		
+		
+		
+		ArrayList<BankaDB> sveBanke= null;
 		try {
-			bankaDAO.update(bankaDuznika);
-		} catch (SQLException e1) {
+			sveBanke = (ArrayList<BankaDB>) bankaDAO.queryForAll();
+		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e2.printStackTrace();
+		}
+		BankaDB bankaDuznika =null;
+		BankaDB bankaPoverioca = null;
+		
+		for(BankaDB b : sveBanke)
+		{
+			if(b.getSwift().equals(mt102.getSwiftKodBankeDuznika()))
+			{
+				bankaDuznika=b;
+			}
+		}
+		for(BankaDB b : sveBanke)
+		{
+			if(b.getSwift().equals(mt102.getSwiftKodBankePoverioca()))
+			{
+				bankaPoverioca=b;
+			}
 		}
 
-		bankaPoverioca.setStanje(bankaPoverioca.getStanje() + iznos);
-		try {
-			bankaDAO.update(bankaPoverioca);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if(bankaDuznika!=null)
+		{
+
+			bankaDuznika.setStanje(bankaDuznika.getStanje() - iznos);
+			try {
+				bankaDAO.update(bankaDuznika);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else
+		{
+			System.out.println("Nije moglo naci banku duznika");
+		}
+
+		if(bankaPoverioca!=null)
+		{
+			
+		
+			bankaPoverioca.setStanje(bankaPoverioca.getStanje() + iznos);
+			try {
+				bankaDAO.update(bankaPoverioca);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else
+		{
+			System.out.println("Nije moglo naci banku primaoca");
 		}
 
 		Date date = new Date();
@@ -173,24 +215,65 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
 		// promena stanja
 		int iznos = mt103.getIznos().intValue();
+		/*
 		BankaDB bankaDuznika = new BankaDB(mt103.getSWIFTKodBankeDuznika(), mt103.getObracunskiRacunBankeDuznika());
 		BankaDB bankaPoverioca = new BankaDB(mt103.getSWIFTKodBankePoverioca(),
 				mt103.getObracunskiRacunBankePoverioca());
-
-		bankaDuznika.setStanje(bankaDuznika.getStanje() - iznos);
+*/
+		ArrayList<BankaDB> sveBanke= null;
 		try {
-			bankaDAO.update(bankaDuznika);
-		} catch (SQLException e1) {
+			sveBanke = (ArrayList<BankaDB>) bankaDAO.queryForAll();
+		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e2.printStackTrace();
+		}
+		BankaDB bankaDuznika =null;
+		BankaDB bankaPoverioca = null;
+		
+		for(BankaDB b : sveBanke)
+		{
+			if(b.getSwift().equals(mt103.getSWIFTKodBankeDuznika()))
+			{
+				bankaDuznika=b;
+			}
+		}
+		for(BankaDB b : sveBanke)
+		{
+			if(b.getSwift().equals(mt103.getSWIFTKodBankePoverioca()))
+			{
+				bankaPoverioca=b;
+			}
 		}
 
-		bankaPoverioca.setStanje(bankaPoverioca.getStanje() + iznos);
-		try {
-			bankaDAO.update(bankaPoverioca);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		
+		if(bankaDuznika!=null)
+		{
+			bankaDuznika.setStanje(bankaDuznika.getStanje() - iznos);
+			try {
+				bankaDAO.update(bankaDuznika);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else
+		{
+			System.out.println("NIJE MOGLO NACI BANKU DUZNIKA..");
+		}
+		
+		if(bankaPoverioca!=null)
+		{
+			bankaPoverioca.setStanje(bankaPoverioca.getStanje() + iznos);
+			try {
+				bankaDAO.update(bankaPoverioca);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else
+		{
+			System.out.println("NIJE MOGLO NACI BANKU POVERIOCA..");
 		}
 
 		System.out.println("OVDE JE RIZICNO: --------------------------");

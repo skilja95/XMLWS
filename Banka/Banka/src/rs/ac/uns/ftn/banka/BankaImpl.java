@@ -25,12 +25,15 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
+import javax.xml.validation.SchemaFactory;
 import javax.xml.ws.Service;
 
 import com.j256.ormlite.dao.Dao;
@@ -174,13 +177,16 @@ public class BankaImpl implements Banka {
         rs.ac.uns.ftn.xmlws.Status _return = new Status();
         try {
         	
-        	
+        	/*
         	try{
-	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.nalogzaprenos");
-	    		Marshaller marshaller = context.createMarshaller();
-	    		File file = new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/dobijeniXmlNZP "+nalogZaPrenos.getIdPoruke()+".xml");
-	    		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-	    		marshaller.marshal(nalogZaPrenos, file);
+        		NalogZaPrenos nalog=null;
+        		JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.nalogzaprenos");
+        		Unmarshaller unmarshaller = context.createUnmarshaller();
+				SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				unmarshaller.setSchema(schemaFactory.newSchema(new File("/home/igor/Documents/apachi/apach_banka/webapps/banka/WEB-INF/wsdl/NalogZaPrenos.xsd")));
+				// Unmarshalling generiše objektni model na osnovu XML fajla
+				 nalog = (NalogZaPrenos) unmarshaller
+						.unmarshal(new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/NZP_"+nalogZaPrenos.getIdPoruke()+ ".xml"));
         	}
         	catch(Exception e)
         	{
@@ -190,7 +196,7 @@ public class BankaImpl implements Banka {
         		s.setStatusText("FAILED");
         		return s;
         	}
-        	
+        	*/
         	//System.out.println("NZP: "+nalogZaPrenos.getDuznik());
         	//System.out.println("IZNOS: "+nalogZaPrenos.getPodaciOUplati().getIznos());
         	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
@@ -805,8 +811,19 @@ public class BankaImpl implements Banka {
         System.out.println(zahtevZaIzvod);
         //Status _return = new Status();
         try {
-        	
+        	/*
         	try{
+        		ZahtevZaIzvod nalog=null;
+        		JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.nalogzaprenos");
+        		Unmarshaller unmarshaller = context.createUnmarshaller();
+				SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				unmarshaller.setSchema(schemaFactory.newSchema(new File("/home/igor/Documents/apachi/apach_banka/webapps/banka/WEB-INF/wsdl/NalogZaPrenos.xsd")));
+				// Unmarshalling generiše objektni model na osnovu XML fajla
+				 nalog = (NalogZaPrenos) unmarshaller
+						.unmarshal(new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/NZP_"+nalogZaPrenos.getIdPoruke()+ ".xml"));
+        	
+        		
+        		
 	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.zahtevzaizvod");
 	    		Marshaller marshaller = context.createMarshaller();
 	    		File file = new File("/home/igor/Documents/gitRepos/XMLWS/Banka/xmlovi/dobijeniXmlZZI "+zahtevZaIzvod.getBrojRacuna()+".xml");
@@ -822,7 +839,7 @@ public class BankaImpl implements Banka {
         		//s.setStatusText("FAILED");
         		//return s;
         	}
-        	
+        	*/
         	
         	JdbcConnectionSource connectionSource = null;
         	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
@@ -1151,7 +1168,7 @@ public class BankaImpl implements Banka {
         System.out.println(mt910);
         //mt910.get
         try {
-        	
+        	/*
         	try{
 	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.mt90010");
 	    		Marshaller marshaller = context.createMarshaller();
@@ -1167,7 +1184,7 @@ public class BankaImpl implements Banka {
         		s.setStatusText("FAILED");
         		return s;
         	}
-        	
+        	*/
         	
         	System.out.println("STIGLO ODOBRENJE MT910, id poruke: "+mt910.getIDPoruke() + "id MT102/MT103 poruke: "+mt910.getIDPorukeNaloga());
         	
@@ -1309,7 +1326,7 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT900");
         System.out.println(mt900);
         try {
-        	
+        	/*
         	try{
 	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.mt90010");
 	    		Marshaller marshaller = context.createMarshaller();
@@ -1325,7 +1342,7 @@ public class BankaImpl implements Banka {
         		s.setStatusText("FAILED");
         		return s;
         	}
-        	
+        	*/
         	JdbcConnectionSource connectionSource = null;
         	connectionSource = new JdbcConnectionSource(DATABASE_URL,"root","cuko");
         	
@@ -1475,7 +1492,7 @@ public class BankaImpl implements Banka {
         LOG.info("Executing operation primiMT102");
         System.out.println(mt102);
         try {
-        	
+        	/*
         	try{
 	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.mt102");
 	    		Marshaller marshaller = context.createMarshaller();
@@ -1491,7 +1508,7 @@ public class BankaImpl implements Banka {
         		s.setStatusText("FAILED");
         		return s;
         	}
-        	
+        	*/
         	
         	System.out.println("PRIMLJEN MT 102, id poruke: "+mt102.getIdPoruke());
         	/*
@@ -1631,7 +1648,7 @@ public class BankaImpl implements Banka {
     public rs.ac.uns.ftn.xmlws.Status primiMT103(rs.ac.uns.ftn.mt103.MT103 mt103) { 
         LOG.info("Executing operation primiMT103");
         System.out.println(mt103);
-        try {
+        try {/*
         	
         	try{
 	        	JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.mt103");
@@ -1648,7 +1665,7 @@ public class BankaImpl implements Banka {
         		s.setStatusText("FAILED");
         		return s;
         	}
-        	
+        	*/
         	
         	System.out.println("Primljen MT103, id poruke: "+mt103.getIDPoruke());
         	

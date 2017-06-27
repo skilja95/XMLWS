@@ -2,7 +2,7 @@
 <nalog_za_prenos xmlns="http://www.ftn.uns.ac.rs/nalogZaPrenos"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/nalogZaPrenos file:/C:/Users/skilj/Desktop/Firma/schemas/NalogZaPrenos.xsd">
-    <id_poruke>c3</id_poruke>
+    <id_poruke>cc3</id_poruke>
     <duznik>M1</duznik>
     <svrha_placanja>RTGS</svrha_placanja>
     <primalac>M4</primalac>
@@ -10,14 +10,14 @@
         <oznaka_valute>RSD</oznaka_valute>
         <iznos>300500</iznos>
         <racun_duznika>
-            <broj_racuna xmlns="http://www.ftn.uns.ac.rs/xmlws">000-0000000000000-01</broj_racuna>
-            <broj_modela xmlns="http://www.ftn.uns.ac.rs/xmlws">18</broj_modela>
-            <poziv_na_broj xmlns="http://www.ftn.uns.ac.rs/xmlws">189</poziv_na_broj>
+            <broj_racuna >000-0000000000000-01</broj_racuna>
+            <broj_modela >18</broj_modela>
+            <poziv_na_broj >189</poziv_na_broj>
         </racun_duznika>
         <racun_poverioca>
-            <broj_racuna xmlns="http://www.ftn.uns.ac.rs/xmlws">000-0000000000000-04</broj_racuna>
-            <broj_modela xmlns="http://www.ftn.uns.ac.rs/xmlws">11</broj_modela>
-            <poziv_na_broj xmlns="http://www.ftn.uns.ac.rs/xmlws">189</poziv_na_broj>
+            <broj_racuna >000-0000000000000-04</broj_racuna>
+            <broj_modela >11</broj_modela>
+            <poziv_na_broj >189</poziv_na_broj>
         </racun_poverioca>
         <datum_valute>2017-06-27</datum_valute>
         <hitno>0</hitno>
