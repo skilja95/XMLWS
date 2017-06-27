@@ -133,6 +133,7 @@
 			<webinf dir="${webcontent.dir}">
 				<include name="**"/>
 			</webinf>
+			<fileset dir="${webcontent.dir}"/>
 		</war>
 	</target>
 

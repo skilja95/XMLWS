@@ -8,11 +8,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.xml.validation.SchemaFactory;
 import javax.xml.ws.Service;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -29,6 +31,11 @@ import utils.Pom;
 @Path("/main")
 public class MainRest {
 	public static int increment=0;
+	public static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
+	public static final String SCHEME_PATH_NALOGZAPRENOS = "WEB-INF/wsdl/NalogZaPrenos.xsd";
+	public static final String SCHEME_PATH_ZAHTEVZAIZVOD = "WEB-INF/wsdl/ZahtevZaIzvod.xsd";
+	public static final String PUTANJA_DO_FOLDERA = "/home/igor/Documents/gitRepos/XMLWS/Firma/xmlovi/";
+	
 	@POST
 	@Path("/loadFile/")
 	@Consumes({ MediaType.APPLICATION_XML })
@@ -44,10 +51,12 @@ public class MainRest {
 			// Unmarshaller je objekat zadužen za konverziju iz XML-a u
 			// objektni model
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-
+			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			unmarshaller.setSchema(schemaFactory.newSchema(new File(SCHEME_PATH_NALOGZAPRENOS)));
 			// Unmarshalling generiše objektni model na osnovu XML fajla
 			NalogZaPrenos nalog = (NalogZaPrenos) unmarshaller
-					.unmarshal(new File("/home/igor/Documents/gitRepos/XMLWS/Firma/xmlovi/" + nazivFajla + ".xml"));
+					.unmarshal(new File(PUTANJA_DO_FOLDERA + nazivFajla + ".xml"));
+
 			System.out.println("\nXML fajl je uspjesno ucitan");
 			/*
 			 * Kreiranje konekcije ka servisu FIRME
@@ -83,10 +92,11 @@ public class MainRest {
 			// Unmarshaller je objekat zadužen za konverziju iz XML-a u
 			// objektni model
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-
+			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			unmarshaller.setSchema(schemaFactory.newSchema(new File(SCHEME_PATH_ZAHTEVZAIZVOD)));
 			// Unmarshalling generiše objektni model na osnovu XML fajla
 			ZahtevZaIzvod zahtev = (ZahtevZaIzvod) unmarshaller
-					.unmarshal(new File("/home/igor/Documents/gitRepos/XMLWS/Firma/xmlovi/" + nazivFajla + ".xml"));
+					.unmarshal(new File(PUTANJA_DO_FOLDERA + nazivFajla + ".xml"));
 			System.out.println("\nXML fajl je uspjesno ucitan");
 			/*
 			 * Kreiranje konekcije ka servisu FIRME
@@ -117,7 +127,7 @@ public class MainRest {
 			
 			JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.faktura");
 			Marshaller marshaller = context.createMarshaller();
-			File file = new File("/home/igor/Documents/gitRepos/XMLWS/Firma/xmlovi/probaSave "+increment+".xml");
+			File file = new File(PUTANJA_DO_FOLDERA + "probaSave "+ increment+".xml");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshaller.marshal(faktura, System.out);
 			marshaller.marshal(faktura, file);

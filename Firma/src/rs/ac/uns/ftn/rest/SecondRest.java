@@ -18,6 +18,8 @@ import rs.ac.uns.ftn.nalogzaprenos.NalogZaPrenos;
 @Path("/second")
 public class SecondRest {
 	public static int increment=0;
+	public static final String PUTANJA_DO_FOLDERA = "/home/igor/Documents/gitRepos/XMLWS/Firma/xmlovi/";
+	
 	@POST
 	@Path("/getFile/")
 	public String getFile(Faktura faktura) throws JAXBException, MalformedURLException {
@@ -28,7 +30,7 @@ public class SecondRest {
 			
 			JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.faktura");
 			Marshaller marshaller = context.createMarshaller();
-			File file = new File("C:\\Users\\skilj\\Documents\\GitHub\\XMLWS\\Firma\\xmlovi\\dobijeniXml "+increment+".xml");
+			File file = new File(PUTANJA_DO_FOLDERA + "dobijeniXml "+increment+".xml");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshaller.marshal(faktura, file);
 			increment++;

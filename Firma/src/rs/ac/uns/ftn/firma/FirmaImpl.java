@@ -54,6 +54,9 @@ public class FirmaImpl implements Firma {
 		Banka banka = service.getPort(portName, Banka.class);
 
 		Presek presek = (Presek) banka.primiZahtevZaIzvod(zahtevZaIzvod);
+		if(presek==null)
+			return null;
+		
 		System.out.println("\nPristigao je presek od banke. Prebacivanje u xml..");
 		JAXBContext context = JAXBContext.newInstance("rs.ac.uns.ftn.presek");
 		Marshaller marshaller = context.createMarshaller();
@@ -61,6 +64,7 @@ public class FirmaImpl implements Firma {
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		marshaller.marshal(presek, file);
 		increment++;
+		
 
 	} catch (java.lang.Exception ex) {
 		ex.printStackTrace();
@@ -99,7 +103,10 @@ public class FirmaImpl implements Firma {
 			Banka banka = service.getPort(portName, Banka.class);
 
 			Status status = (Status) banka.primiNalogZaPlacanje(nalogZaPrenos);
-			System.out.println("\nStatusna poruka od web servisa banke je: " + status.getStatusText());
+			if(status!=null)
+				System.out.println("\nStatusna poruka od web servisa banke je: " + status.getStatusText());
+			else 
+				System.out.println("\nStatusna poruka od web servisa banke je prazna. ");
 
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
