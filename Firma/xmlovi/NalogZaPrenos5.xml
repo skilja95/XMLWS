@@ -2,7 +2,7 @@
 <nalog_za_prenos xmlns="http://www.ftn.uns.ac.rs/nalogZaPrenos"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/nalogZaPrenos file:/C:/Users/skilj/Desktop/Firma/schemas/NalogZaPrenos.xsd">
-    <id_poruke>a5</id_poruke>
+    <id_poruke>c5</id_poruke>
     <duznik>M4</duznik>
     <svrha_placanja>Clearing</svrha_placanja>
     <primalac>M2</primalac>
@@ -19,8 +19,8 @@
             <broj_modela xmlns="http://www.ftn.uns.ac.rs/xmlws">11</broj_modela>
             <poziv_na_broj xmlns="http://www.ftn.uns.ac.rs/xmlws">189</poziv_na_broj>
         </racun_poverioca>
-        <datum_valute>2017-06-26</datum_valute>
+        <datum_valute>2017-06-27</datum_valute>
         <hitno>0</hitno>
-        <datum_naloga>2017-06-26</datum_naloga>
+        <datum_naloga>2017-06-27</datum_naloga>
     </podaci_o_uplati>
 </nalog_za_prenos>

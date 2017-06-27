@@ -1,54 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <presek xmlns="http://www.ftn.uns.ac.rs/presek">
     <zaglavlje>
-        <broj_racuna>000000000000000001</broj_racuna>
+        <broj_racuna>000000000000000004</broj_racuna>
         <datum_naloga>2017-06-27+02:00</datum_naloga>
         <broj_preseka>1</broj_preseka>
-        <prethodno_stanje>-301499.0</prethodno_stanje>
+        <prethodno_stanje>301178.0</prethodno_stanje>
         <broj_promena_u_korist>0</broj_promena_u_korist>
-        <broj_promena_na_teret>4</broj_promena_na_teret>
+        <broj_promena_na_teret>3</broj_promena_na_teret>
         <ukupno_u_korist>0.0</ukupno_u_korist>
-        <ukupno_na_teret>303463.0</ukupno_na_teret>
-        <novo_stanje>-605262.0</novo_stanje>
+        <ukupno_na_teret>301820.0</ukupno_na_teret>
+        <novo_stanje>602356.0</novo_stanje>
     </zaglavlje>
-    <stavka>
-        <duznik>M1</duznik>
-        <svrha_placanja>Clearing </svrha_placanja>
-        <poverilac>M2</poverilac>
-        <datum_naloga>2017-06-27+02:00</datum_naloga>
-        <datum_valute>2017-06-27+02:00</datum_valute>
-        <racun_duznika>
-            <broj_racuna>000000000000000001</broj_racuna>
-            <broj_modela>18</broj_modela>
-            <poziv_na_broj>189</poziv_na_broj>
-        </racun_duznika>
-        <racun_poverioca>
-            <broj_racuna>000000000000000002</broj_racuna>
-            <broj_modela>11</broj_modela>
-            <poziv_na_broj>189</poziv_na_broj>
-        </racun_poverioca>
-        <iznos>982.0</iznos>
-        <smer>T</smer>
-    </stavka>
-    <stavka>
-        <duznik>M1</duznik>
-        <svrha_placanja>Clearing </svrha_placanja>
-        <poverilac>M2</poverilac>
-        <datum_naloga>2017-06-27+02:00</datum_naloga>
-        <datum_valute>2017-06-27+02:00</datum_valute>
-        <racun_duznika>
-            <broj_racuna>000000000000000001</broj_racuna>
-            <broj_modela>18</broj_modela>
-            <poziv_na_broj>189</poziv_na_broj>
-        </racun_duznika>
-        <racun_poverioca>
-            <broj_racuna>000000000000000002</broj_racuna>
-            <broj_modela>11</broj_modela>
-            <poziv_na_broj>189</poziv_na_broj>
-        </racun_poverioca>
-        <iznos>982.0</iznos>
-        <smer>T</smer>
-    </stavka>
     <stavka>
         <duznik>M1</duznik>
         <svrha_placanja>RTGS</svrha_placanja>
@@ -66,7 +28,7 @@
             <poziv_na_broj>189</poziv_na_broj>
         </racun_poverioca>
         <iznos>300500.0</iznos>
-        <smer>T</smer>
+        <smer>K</smer>
     </stavka>
     <stavka>
         <duznik>M1</duznik>
@@ -85,6 +47,25 @@
             <poziv_na_broj>189</poziv_na_broj>
         </racun_poverioca>
         <iznos>999.0</iznos>
+        <smer>K</smer>
+    </stavka>
+    <stavka>
+        <duznik>M4</duznik>
+        <svrha_placanja>Clearing</svrha_placanja>
+        <poverilac>M2</poverilac>
+        <datum_naloga>2017-06-27+02:00</datum_naloga>
+        <datum_valute>2017-06-27+02:00</datum_valute>
+        <racun_duznika>
+            <broj_racuna>000000000000000004</broj_racuna>
+            <broj_modela>18</broj_modela>
+            <poziv_na_broj>189</poziv_na_broj>
+        </racun_duznika>
+        <racun_poverioca>
+            <broj_racuna>000000000000000002</broj_racuna>
+            <broj_modela>11</broj_modela>
+            <poziv_na_broj>189</poziv_na_broj>
+        </racun_poverioca>
+        <iznos>321.0</iznos>
         <smer>T</smer>
     </stavka>
 </presek>
